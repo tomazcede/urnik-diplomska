@@ -27,6 +27,8 @@ class Schedule extends Model
 
             $schedule['name'] = $this->name;
             $schedule['schedule'] = [];
+            $schedule['min_hour'] = 7;
+            $schedule['max_hour'] = 15;
 
             if ($from_date && $to_date) {
                 $period = CarbonPeriod::create($from_date, $to_date);
@@ -36,26 +38,47 @@ class Schedule extends Model
                     $dayName = strtolower($date->format('D'));
                     $days[] = $dayName;
                 }
-
-                $days = array_keys($days);
             } else {
                 $days = Event::AVALIABLE_DAYS;
             }
 
-            foreach($days as $day){
-                $schedule['schedule'][$day] = [];
-
-                $eventsOnDay = $this->events()
+            foreach ($days as $day) {
+                // Base query shared across calculations
+                $query = $this->events()
                     ->where('day', $day)
                     ->where('start_date', '<=', $from_date ?? date('Y-m-d'))
-                    ->where(function($query) use ($to_date){
+                    ->where(function ($query) use ($to_date) {
                         $query->whereNull('end_date')
                             ->orWhere('end_date', '>=', $to_date ?? date('Y-m-d'));
-                    })
-                    ->orderBy('from_hour')
-                    ->get();
+                    });
 
-                $schedule['schedule'][$day] = $eventsOnDay->toArray();
+                // Get all events
+                $eventsOnDay = $query->orderBy('from_hour')->get();
+
+                // Determine hour range
+                $minHour = $eventsOnDay->min('from_hour');
+                if($minHour !== null && $minHour < $schedule['min_hour']){
+                    $schedule['min_hour'] = $minHour;
+                }
+                $maxHour = $eventsOnDay->max('to_hour');
+                if($maxHour !== null && $maxHour > $schedule['max_hour']){
+                    $schedule['max_hour'] = $maxHour;
+                }
+
+                $hourly = [];
+
+                if ($minHour !== null && $maxHour !== null) {
+                    for ($hour = $minHour; $hour <= $maxHour; $hour++) {
+                        $hourly[$hour] = $eventsOnDay
+                            ->filter(fn($event) =>
+                                $event->from_hour <= $hour && $event->to_hour >= $hour
+                            )
+                            ->values()
+                            ->toArray();
+                    }
+                }
+
+                $schedule['schedule'][$day] = $hourly;
             }
 
             return $schedule;
