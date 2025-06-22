@@ -49,10 +49,10 @@
 <script setup lang="ts">
 import { useScheduleStore } from "~/stores/schedule";
 import {computed} from "vue";
-import {$fetch} from "ofetch";
-import {useRuntimeConfig} from "#app";
+import {useModalStore} from "~/stores/modal";
 
-const scheduleStore = useScheduleStore();
+const modalStore = useModalStore()
+const scheduleStore = useScheduleStore()
 
 const schedule = computed(() => scheduleStore.schedule)
 const days = computed(() => Object.keys(scheduleStore.schedule))
@@ -99,15 +99,8 @@ const maxEndDate = computed(() => {
 })
 
 async function sendData(){
-    console.log(localStorage.getItem('schedule'))
-
-    const config = useRuntimeConfig()
-    const url = `${config.public.apiUrl}/api/schedule/convert-from`
-
-    const data = await $fetch(url, {
-      method: 'POST',
-      body: {json: localStorage.getItem('schedule')}
-    })
+  modalStore.isVisible = true
+  modalStore.modalType = 'addEvent'
 }
 
 </script>

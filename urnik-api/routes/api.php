@@ -22,7 +22,6 @@ Route::group(['prefix' => 'schedule'], function () {
         $schedule = new Schedule();
         $schedule->name = $scheduleData->name;
 
-// Create a collection to mimic the many-to-many relationship
         $events = collect();
 
         foreach ($scheduleData->schedule as $day) {
@@ -35,10 +34,9 @@ Route::group(['prefix' => 'schedule'], function () {
             }
         }
 
-// Optionally, set the events as a dynamic relation (not persistent)
         $schedule->setRelation('events', $events);
 
-        return response()->json($schedule->convertToJson());
+        return response()->json($schedule->co());
 
     });
 });

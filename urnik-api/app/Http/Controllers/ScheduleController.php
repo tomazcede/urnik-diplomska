@@ -39,9 +39,13 @@ class ScheduleController extends Controller
         }
     }
 
-    public function addEvents(Request $request, Schedule $schedule) {
+    public function addEvents(Request $request) {
         try {
-            if($request->events){
+            if($request->json) {
+                $schedule = Schedule::convertFromJson($request->json);
+                $schedule->addEventsToJson($request->events);
+            } else {
+                $schedule = Schedule::find($request->id);
                 $schedule->addEvents($request->events);
             }
 

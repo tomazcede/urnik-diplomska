@@ -43,13 +43,14 @@ class Schedule extends Model
             }
 
             foreach ($days as $day) {
-                $query = $this->events()
-                    ->where('day', $day)
-                    ->where('start_date', '<=', $from_date ?? date('Y-m-d'))
-                    ->where(function ($query) use ($to_date) {
-                        $query->whereNull('end_date')
-                            ->orWhere('end_date', '>=', $to_date ?? date('Y-m-d'));
-                    })->orderBy('from_hour')->get();
+                $query = collect($this->events)->filter(function ($event) use ($day, $from_date, $to_date) {
+                    return $event->day === $day &&
+                        $event->start_date <= ($from_date ?? date('Y-m-d')) &&
+                        (
+                            $event->end_date === null ||
+                            $event->end_date >= ($to_date ?? date('Y-m-d'))
+                        );
+                })->sortBy('from_hour');
 
                 if($query->count() <= 0)
                     $schedule['schedule'][$day] = [];
@@ -85,7 +86,7 @@ class Schedule extends Model
         }
     }
 
-    public function convertFromJson($scheduleJson){
+    public static function convertFromJson($scheduleJson){
         $scheduleData = json_decode($scheduleJson);
 
         $schedule = new Schedule();
@@ -103,9 +104,9 @@ class Schedule extends Model
             }
         }
 
-        $schedule->setRelation('events', $events);
+        $schedule->setRelation('events', $events->unique());
 
-        return response()->json($schedule->events);
+        return $schedule;
 
     }
 
@@ -126,8 +127,8 @@ class Schedule extends Model
 
     public function addEventsToJson($events){
         foreach ($events as $event) {
-            $data = collect($event);
-            $e = new Event($data->toArray());
+            $data = collect($event)->toArray();
+            $e = new Event($data);
             $this->events->push($e);
         }
     }
