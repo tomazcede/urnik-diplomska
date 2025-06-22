@@ -43,39 +43,37 @@ class Schedule extends Model
             }
 
             foreach ($days as $day) {
-                // Base query shared across calculations
                 $query = $this->events()
                     ->where('day', $day)
                     ->where('start_date', '<=', $from_date ?? date('Y-m-d'))
                     ->where(function ($query) use ($to_date) {
                         $query->whereNull('end_date')
                             ->orWhere('end_date', '>=', $to_date ?? date('Y-m-d'));
-                    });
+                    })->orderBy('from_hour')->get();
 
-                // Get all events
-                $eventsOnDay = $query->orderBy('from_hour')->get();
+                if($query->count() <= 0)
+                    $schedule['schedule'][$day] = [];
 
-                // Determine hour range
-                $minHour = $eventsOnDay->min('from_hour');
-                if($minHour !== null && $minHour < $schedule['min_hour']){
+                $minHour = $query->min('from_hour');
+                if($minHour < $schedule['min_hour']){
                     $schedule['min_hour'] = $minHour;
                 }
-                $maxHour = $eventsOnDay->max('to_hour');
-                if($maxHour !== null && $maxHour > $schedule['max_hour']){
+                $maxHour = $query->max('to_hour');
+                if($maxHour > $schedule['max_hour']){
                     $schedule['max_hour'] = $maxHour;
                 }
 
                 $hourly = [];
 
-                if ($minHour !== null && $maxHour !== null) {
-                    for ($hour = $minHour; $hour <= $maxHour; $hour++) {
-                        $hourly[$hour] = $eventsOnDay
-                            ->filter(fn($event) =>
-                                $event->from_hour <= $hour && $event->to_hour >= $hour
-                            )
-                            ->values()
-                            ->toArray();
-                    }
+                while($minHour <= $maxHour){
+                    $hourly[$minHour] = $query
+                        ->filter(fn($event) =>
+                            $event->from_hour <= $minHour && $event->to_hour >= $minHour
+                        )
+                        ->values()
+                        ->toArray();
+
+                    $minHour += 1;
                 }
 
                 $schedule['schedule'][$day] = $hourly;

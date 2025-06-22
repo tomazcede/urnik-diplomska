@@ -12,21 +12,19 @@ export const useScheduleStore = defineStore('schedule', {
     //     events: (state) => state.events,
     // },
     actions: {
-        async getSchedule(id: number) {
+        async getSchedule(id: number, from: string, to:string) {
             const config = useRuntimeConfig()
             const url = `${config.public.apiUrl}/api/schedule/show/${id}`
-            console.log('Calling URL:', config.public.apiUrl)
 
             const data = await $fetch(url, {
                 method: 'POST',
+                body: {from, to}
             })
 
-            console.log(data)
-
-            this.name = data.name
-            this.schedule = data.schedule
-            this.minHour = data.min_hour
-            this.maxHour = data.max_hour
+            this.name = data.name ?? ''
+            this.schedule = data.schedule ?? []
+            this.minHour = data.min_hour ?? 7
+            this.maxHour = data.max_hour ?? 15
         }
     },
 })
