@@ -1,35 +1,40 @@
 <template>
 <div class="w-full">
-  <div class="w-full mb-4 justify-center flex flex-row gap-4">
-    <input
-        type="date"
-        v-model="startOfWeek"
-        @change="datesChanged"
-        :min="minStartDate"
-        :max="endOfWeek"
-    />
+  <div class="relative">
+    <div class="w-full mb-4 justify-center flex flex-row gap-4">
+      <input
+          type="date"
+          v-model="startOfWeek"
+          @change="datesChanged"
+          :min="minStartDate"
+          :max="endOfWeek"
+      />
 
-    <input
-        type="date"
-        v-model="endOfWeek"
-        @change="datesChanged"
-        :min="startOfWeek"
-        :max="maxEndDate"
-    />
+      <input
+          type="date"
+          v-model="endOfWeek"
+          @change="datesChanged"
+          :min="startOfWeek"
+          :max="maxEndDate"
+      />
+    </div>
 
+    <button class="absolute right-2 top-0" :title="$t('add_new_event')" @click="sendData">
+        +
+    </button>
   </div>
   <div class="row">
     <div class="col">
-      <div class="col w-20 h-10" ></div>
-      <div class="col w-20 h-20" v-for="hour in hours" :key="hour">
+      <div class="h-5 md:h-10" ></div>
+      <div class="h-10 md:h-20" v-for="hour in hours" :key="hour">
           {{hour}}
       </div>
     </div>
     <div class="col" v-for="day in days" :key="day">
-      <div class="col w-20 h-10" >{{ $t(day) }}</div>
-      <div class="col w-20 h-20" v-for="hour in hours" :key="hour">
-        <div v-if="schedule[day][hour] && schedule[day][hour].length">
-          <div v-for="event in schedule[day][hour]" :key="event.id">
+      <div class="h-5 md:h-10" >{{ $t(day) }}</div>
+      <div class="h-10 md:h-20" v-for="hour in hours" :key="hour">
+        <div class="row" v-if="schedule[day][hour] && schedule[day][hour].length">
+          <div class="col" v-for="event in schedule[day][hour]" :key="event.id">
             {{ event.name }}
           </div>
         </div>
@@ -44,6 +49,8 @@
 <script setup lang="ts">
 import { useScheduleStore } from "~/stores/schedule";
 import {computed} from "vue";
+import {$fetch} from "ofetch";
+import {useRuntimeConfig} from "#app";
 
 const scheduleStore = useScheduleStore();
 
@@ -90,6 +97,18 @@ const maxEndDate = computed(() => {
   start.setDate(start.getDate() + 6)
   return formatDate(start)
 })
+
+async function sendData(){
+    console.log(localStorage.getItem('schedule'))
+
+    const config = useRuntimeConfig()
+    const url = `${config.public.apiUrl}/api/schedule/convert-from`
+
+    const data = await $fetch(url, {
+      method: 'POST',
+      body: {json: localStorage.getItem('schedule')}
+    })
+}
 
 </script>
 

@@ -5,5 +5,7 @@
   "thu": "Četrtek",
   "fri": "Petek",
   "sat": "Sobota",
-  "sun": "Nedelja"
+  "sun": "Nedelja",
+
+  "add_new_event": "Dodaj nov dogodek"
 }

@@ -5,5 +5,7 @@
   "thu": "Thursday",
   "fri": "Friday",
   "sat": "Saturday",
-  "sun": "Sunday"
+  "sun": "Sunday",
+
+  "add_new_event": "Add new event"
 }

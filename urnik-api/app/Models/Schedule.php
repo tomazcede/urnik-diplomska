@@ -55,7 +55,7 @@ class Schedule extends Model
                     $schedule['schedule'][$day] = [];
 
                 $minHour = $query->min('from_hour');
-                if($minHour < $schedule['min_hour']){
+                if($minHour !== null && $minHour < $schedule['min_hour']){
                     $schedule['min_hour'] = $minHour;
                 }
                 $maxHour = $query->max('to_hour');
@@ -85,6 +85,30 @@ class Schedule extends Model
         }
     }
 
+    public function convertFromJson($scheduleJson){
+        $scheduleData = json_decode($scheduleJson);
+
+        $schedule = new Schedule();
+        $schedule->name = $scheduleData->name;
+
+        $events = collect();
+
+        foreach ($scheduleData->schedule as $day) {
+            foreach ($day as $hour) {
+                foreach ($hour as $event) {
+                    $data = collect($event);
+                    $e = new Event($data->toArray());
+                    $events->push($e);
+                }
+            }
+        }
+
+        $schedule->setRelation('events', $events);
+
+        return response()->json($schedule->events);
+
+    }
+
     public function addEvents($events){
         $eventIds = [];
 
@@ -98,5 +122,13 @@ class Schedule extends Model
         }
 
         $this->events()->syncWithoutDetaching($eventIds);
+    }
+
+    public function addEventsToJson($events){
+        foreach ($events as $event) {
+            $data = collect($event);
+            $e = new Event($data->toArray());
+            $this->events->push($e);
+        }
     }
 }
