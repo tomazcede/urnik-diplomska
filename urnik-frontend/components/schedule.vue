@@ -2,21 +2,16 @@
 <div class="w-full">
   <div class="relative">
     <div class="w-full mb-4 justify-center flex flex-row gap-4">
-      <input
-          type="date"
-          v-model="startOfWeek"
-          @change="datesChanged"
-          :min="minStartDate"
-          :max="endOfWeek"
-      />
 
-      <input
-          type="date"
-          v-model="endOfWeek"
-          @change="datesChanged"
-          :min="startOfWeek"
-          :max="maxEndDate"
-      />
+      <VueDatePicker
+          class="w-25"
+          v-model="dateRange"
+          :range="{ maxRange: 6 }"
+          @update:model-value="datesChanged"
+          :enable-time-picker="false"
+      >
+
+      </VueDatePicker>
     </div>
 
     <button class="absolute right-2 top-0" :title="$t('add_new_event')" @click="sendData">
@@ -50,6 +45,8 @@
 import { useScheduleStore } from "~/stores/schedule";
 import {computed} from "vue";
 import {useModalStore} from "~/stores/modal";
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
 
 const modalStore = useModalStore()
 const scheduleStore = useScheduleStore()
@@ -62,46 +59,35 @@ const hours = computed(() => {
   return Array.from({ length: max - min + 1 }, (_, i) => i + min)
 })
 
-const today = new Date()
-const day = today.getDay()
-const diffToMonday = today.getDate() - day + (day === 0 ? -6 : 1)
-const diffToSunday = today.getDate() - day + (day === 0 ? 0 : 6)
-
-const monday = new Date(today)
-monday.setDate(diffToMonday)
-const sunday = new Date(today)
-sunday.setDate(diffToSunday)
-
-function formatDate(date) {
-  return date.toISOString().split('T')[0]
-}
-
-const startOfWeek = ref(formatDate(monday))
-const endOfWeek = ref(formatDate(sunday))
-
-scheduleStore.getSchedule(1, startOfWeek.value, endOfWeek.value);
-
 function datesChanged(){
-  scheduleStore.getSchedule(1, startOfWeek.value, endOfWeek.value);
+  scheduleStore.getSchedule(1, dateRange.value[0], dateRange.value[1]);
 }
-
-const minStartDate = computed(() => {
-  const end = new Date(endOfWeek.value)
-  end.setDate(end.getDate() - 6)
-  return formatDate(end)
-})
-
-// Computed max for endOfWeek = startOfWeek + 6 days
-const maxEndDate = computed(() => {
-  const start = new Date(startOfWeek.value)
-  start.setDate(start.getDate() + 6)
-  return formatDate(start)
-})
 
 async function sendData(){
   modalStore.isVisible = true
   modalStore.modalType = 'addEvent'
 }
+
+const dateRange = ref();
+
+function formatDate(date) {
+  return date.toISOString().split('T')[0]
+}
+
+onMounted(() => {
+  const today = new Date()
+  const day = today.getDay()
+  const diffToMonday = today.getDate() - day + (day === 0 ? -6 : 1)
+  const diffToSunday = today.getDate() - day + (day === 0 ? 0 : 7)
+
+  const monday = new Date(today)
+  monday.setDate(diffToMonday)
+  const sunday = new Date(today)
+  sunday.setDate(diffToSunday)
+  dateRange.value = [formatDate(monday), formatDate(sunday)];
+
+  scheduleStore.getSchedule(1, dateRange.value[0], dateRange.value[1]);
+})
 
 </script>
 

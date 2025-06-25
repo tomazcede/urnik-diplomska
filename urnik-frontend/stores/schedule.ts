@@ -22,12 +22,7 @@ export const useScheduleStore = defineStore('schedule', {
                     body: {from, to}
                 })
 
-                localStorage.setItem('schedule', JSON.stringify(data))
-
-                this.name = data.name ?? ''
-                this.schedule = data.schedule ?? []
-                this.minHour = data.min_hour ?? 7
-                this.maxHour = data.max_hour ?? 15
+                this.setSchedule(data)
             } catch (error) {
                 this.currentId = null
 
@@ -56,15 +51,19 @@ export const useScheduleStore = defineStore('schedule', {
                     body: postdata
                 })
 
-                localStorage.setItem('schedule', JSON.stringify(data))
-
-                this.name = data.name ?? ''
-                this.schedule = data.schedule ?? []
-                this.minHour = data.min_hour ?? 7
-                this.maxHour = data.max_hour ?? 15
+                this.setSchedule(data)
             } catch (error) {
                 console.log(error)
             }
+        },
+
+        setSchedule(data: object){
+            localStorage.setItem('schedule', JSON.stringify(data))
+
+            this.name = data.name ?? ''
+            this.schedule = data.schedule ?? []
+            this.minHour = data.min_hour ?? 7
+            this.maxHour = data.max_hour ?? 15
         }
     },
 })
