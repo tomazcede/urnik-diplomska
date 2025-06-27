@@ -21,7 +21,7 @@
   <div>
     <table class="w-full md:w-[75%] mx-auto table-fixed border-collapse border border-gray-300 text-xs">
       <thead>
-      <tr class="bg-gray-100">
+      <tr :style="colors.primary_color ? 'background-color: ' + colors.primary_color + ';' : 'background-color: var(--color-gray-100);'">
         <th v-if="!isMobile" class="border border-gray-300 p-2 w-20"></th>
         <th
             v-for="day in days"
@@ -39,13 +39,16 @@
           :key="hour"
           class="hover:bg-gray-50 transition-colors"
       >
-        <td v-if="!isMobile" class="border border-gray-300 p-2 text-center font-medium text-sm bg-gray-50">
+        <td v-if="!isMobile"
+            class="border border-gray-300 p-2 text-center font-medium text-sm"
+            :style="colors.secondary_color ? 'background-color: ' + colors.secondary_color + ';' : 'background-color: var(--color-gray-50);'">
           {{ formatHour(hour) }}
         </td>
         <td
             v-for="day in days"
             :key="day"
             class="border border-gray-300 p-2 align-top h-16"
+            :style="colors.background_color ? 'background-color: ' + colors.background_color + ';' : ''"
         >
           <div
               class="space-y-1"
@@ -80,6 +83,7 @@ const modalStore = useModalStore()
 const scheduleStore = useScheduleStore()
 
 const schedule = computed(() => scheduleStore.schedule)
+const colors = computed(() => scheduleStore.colors)
 const days = computed(() => Object.keys(scheduleStore.schedule))
 const hours = computed(() => {
   const min = scheduleStore.minHour

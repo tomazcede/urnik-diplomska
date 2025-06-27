@@ -7,7 +7,12 @@ export const useScheduleStore = defineStore('schedule', {
         name: '',
         minHour: 7,
         maxHour: 15,
-        currentId: null
+        currentId: null,
+        colors: {
+            primary_color: null,
+            secondary_color: null,
+            background_color: null
+        }
     }),
     actions: {
         async getSchedule(id: any, from: string, to:string) {
@@ -62,6 +67,9 @@ export const useScheduleStore = defineStore('schedule', {
             localStorage.setItem('schedule', JSON.stringify(data))
 
             this.name = data.name ?? ''
+            this.colors.primary_color = data.primary_color
+            this.colors.secondary_color = data.secondary_color
+            this.colors.background_color = data.background_color
             this.schedule = data.schedule ?? []
             this.minHour = data.min_hour ?? 7
             this.maxHour = data.max_hour ?? 15

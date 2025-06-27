@@ -11,6 +11,9 @@ class Schedule extends Model
     protected $fillable = [
         'name',
         'user_id',
+        'primary_color',
+        'secondary_color',
+        'background_color',
     ];
 
     public function user(){
@@ -26,6 +29,9 @@ class Schedule extends Model
             $schedule = [];
 
             $schedule['name'] = $this->name;
+            $schedule['primary_color'] = $this->primary_color;
+            $schedule['secondary_color'] = $this->secondary_color;
+            $schedule['background_color'] = $this->background_color;
             $schedule['schedule'] = [];
             $schedule['min_hour'] = 7;
             $schedule['max_hour'] = 15;
