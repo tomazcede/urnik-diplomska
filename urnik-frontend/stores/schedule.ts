@@ -10,16 +10,17 @@ export const useScheduleStore = defineStore('schedule', {
         currentId: null
     }),
     actions: {
-        async getSchedule(id: number, from: string, to:string) {
+        async getSchedule(id: any, from: string, to:string) {
+            let localData = localStorage.getItem('schedule')
             const config = useRuntimeConfig()
-            const url = `${config.public.apiUrl}/api/schedule/show/${id}`
+            const url = `${config.public.apiUrl}/api/schedule/show`
 
             try{
                 this.currentId = id
 
                 const data = await $fetch(url, {
                     method: 'POST',
-                    body: {from, to}
+                    body: {from, to, id, json: localData}
                 })
 
                 this.setSchedule(data)

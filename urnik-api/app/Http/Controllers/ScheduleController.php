@@ -8,15 +8,17 @@ use Illuminate\Http\Request;
 
 class ScheduleController extends Controller
 {
-    public function show(Schedule $schedule, Request $request) {
+    public function show(Request $request) {
         try {
+            $schedule = $request->id && $request->id != null ? Schedule::find($request->id) : Schedule::convertFromJson($request->json);
+
             if($request->from && $request->to){
                 return response()->json($schedule->convertToJson($request->from, $request->to));
             }
 
             return response()->json($schedule->convertToJson());
         } catch(\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], $e->getCode());
+            return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 

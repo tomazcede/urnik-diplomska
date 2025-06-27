@@ -45,11 +45,8 @@ class Schedule extends Model
             foreach ($days as $day) {
                 $query = collect($this->events)->filter(function ($event) use ($day, $from_date, $to_date) {
                     return $event->day === $day &&
-                        $event->start_date <= ($from_date ?? date('Y-m-d')) &&
-                        (
-                            $event->end_date === null ||
-                            $event->end_date >= ($to_date ?? date('Y-m-d'))
-                        );
+                        ($event->start_date <= ($from_date || Carbon::now()) ) &&
+                        (($to_date && $event->end_date >= $to_date) || !$to_date || $event->end_date === null);
                 })->sortBy('from_hour');
 
                 if($query->count() <= 0)
@@ -90,9 +87,16 @@ class Schedule extends Model
         $scheduleData = json_decode($scheduleJson);
 
         $schedule = new Schedule();
-        $schedule->name = $scheduleData->name;
-
         $events = collect();
+
+        if($scheduleData == null){
+            $schedule->setRelation('events', $events->unique());
+            $schedule->name = 'new';
+
+            return $schedule;
+        }
+
+        $schedule->name = $scheduleData->name;
 
         foreach ($scheduleData->schedule as $day) {
             foreach ($day as $hour) {

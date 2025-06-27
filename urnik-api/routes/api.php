@@ -12,7 +12,7 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::group(['prefix' => 'schedule'], function () {
-    Route::post('/show/{schedule}', [ScheduleController::class, 'show']);
+    Route::post('/show', [ScheduleController::class, 'show']);
     Route::post('/store', [ScheduleController::class, 'store']);
     Route::post('/add-events', [ScheduleController::class, 'addEvents']);
 

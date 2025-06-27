@@ -4,7 +4,7 @@
     <div class="w-full mb-4 justify-center flex flex-row gap-4">
 
       <VueDatePicker
-          class="w-25"
+          class="w-50 md:w-25"
           v-model="dateRange"
           :range="{ maxRange: 6 }"
           @update:model-value="datesChanged"
@@ -88,7 +88,7 @@ const hours = computed(() => {
 })
 
 function datesChanged(){
-  scheduleStore.getSchedule(1, dateRange.value[0], dateRange.value[1]);
+  scheduleStore.getSchedule(null, dateRange.value[0], dateRange.value[1]);
 }
 
 async function sendData(){
@@ -136,7 +136,7 @@ onMounted(() => {
   sunday.setDate(diffToSunday)
   dateRange.value = [formatDate(monday), formatDate(sunday)];
 
-  scheduleStore.getSchedule(1, dateRange.value[0], dateRange.value[1]);
+  scheduleStore.getSchedule(null, dateRange.value[0], dateRange.value[1]);
 
   setInterval(() => {
     const hour = new Date().getHours();

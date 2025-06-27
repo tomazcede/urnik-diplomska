@@ -1,6 +1,5 @@
 <template>
   <div>
-    <p>Some default layout content shared across all pages</p>
     <modal>
       <add-event-modal v-if="modalStore.modalType == 'addEvent'" />
     </modal>
