@@ -1,6 +1,6 @@
 <template>
-  <div class="w-full h-full flex justify-center">
-    <div class="bg-white w-1/2 opacity-100 text-black p-2 md:p-4 flex flex-col" style="height: fit-content">
+  <div class="w-full h-full flex justify-center items-center">
+    <div class="bg-white w-75 md:w-50 opacity-100 text-black p-2 md:p-4 flex flex-col" style="height: fit-content">
       <div class="w-full flex justify-end">
         <span @click="modalStore.closeModal" class="cursor-pointer">x</span>
       </div>
@@ -17,7 +17,7 @@
       <label>Location</label>
       <input type="text" class="border" v-model="event.location" />
 
-      <div class="flex flex-row gap-4">
+      <div class="flex flex-col md:flex-row gap-4">
         <div class="flex flex-col">
           <label>Start date</label>
           <input type="date" class="border" v-model="event.start_date" />
@@ -46,11 +46,11 @@
       </div>
 
       <div class="w-full flex justify-end gap-4">
-        <button @click="addToList">
+        <button class="btn-primary" @click="addToList">
           Add to list
         </button>
 
-        <button @click="addEvents">
+        <button class="btn-primary" :disabled="!events.length" :class="!events.length ? 'btn-disabled' : ''" @click="addEvents">
           Add to schedule
         </button>
       </div>
@@ -114,5 +114,14 @@ async function addEvents(){
 </script>
 
 <style scoped>
-/* Add your custom styles here if needed */
+.btn-primary {
+  background: sandybrown;
+  padding: 5px;
+  border-radius: 10px;
+  color: white
+}
+
+.btn-disabled {
+  color: gray !important;
+}
 </style>

@@ -9,6 +9,7 @@
           :range="{ maxRange: 6 }"
           @update:model-value="datesChanged"
           :enable-time-picker="false"
+          :clearable="false"
       >
 
       </VueDatePicker>
@@ -47,7 +48,7 @@
         <td
             v-for="day in days"
             :key="day"
-            class="border border-gray-300 p-2 align-top h-16"
+            class="border border-gray-300 p-2 align-top h-16 relative"
             :style="colors.background_color ? 'background-color: ' + colors.background_color + ';' : ''"
         >
           <div
@@ -62,7 +63,10 @@
               {{ formatMobile(event.name) }}
             </div>
           </div>
-          <div v-else class="h-full"></div>
+          <div v-else class="h-full">
+
+          </div>
+          <span v-if="isMobile && day == days[0]" class="absolute bottom-0">{{ formatHour(hour) }}</span>
         </td>
       </tr>
       </tbody>

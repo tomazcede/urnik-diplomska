@@ -1,9 +1,9 @@
 <template>
   <div>
-    <modal>
+    <modal class="z-30">
       <add-event-modal v-if="modalStore.modalType == 'addEvent'" />
     </modal>
-    <div class="absolute top-0 w-full h-full bg-black opacity-50" v-if="modalStore.isVisible">
+    <div class="absolute top-0 w-full h-full bg-black opacity-50 z-20" v-if="modalStore.isVisible">
 
     </div>
     <slot />
