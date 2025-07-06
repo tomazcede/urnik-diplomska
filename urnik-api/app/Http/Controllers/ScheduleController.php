@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Event;
 use App\Models\Schedule;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ScheduleController extends Controller
 {
@@ -52,6 +54,27 @@ class ScheduleController extends Controller
             }
 
             return response()->json($schedule->convertToJson());
+        } catch(\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], $e->getCode());
+        }
+    }
+
+    public function export(Request $request) {
+        try {
+            if($request->json) {
+                $schedule = Schedule::convertFromJson($request->json);
+            } else {
+                $schedule = Schedule::find($request->id);
+            }
+
+            $data = Schedule::generateIcal($schedule);
+
+            $filename = 'schedule_' . Str::random(10) . '.ics';
+            $path = storage_path('app/' . $filename);
+
+            file_put_contents($path, $data);
+
+            return response()->download($path)->deleteFileAfterSend(true);
         } catch(\Exception $e) {
             return response()->json(['error' => $e->getMessage()], $e->getCode());
         }

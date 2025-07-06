@@ -4,7 +4,15 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
+use DateTime;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Str;
+use MongoDB\BSON\Int64;
+use Spatie\IcalendarGenerator\Components\Calendar;
+use Spatie\IcalendarGenerator\Components\Event;
+use Spatie\IcalendarGenerator\Enums\RecurrenceFrequency;
+use Spatie\IcalendarGenerator\ValueObjects\RRule;
 
 class Schedule extends Model
 {
@@ -21,7 +29,7 @@ class Schedule extends Model
     }
 
     public function events(){
-        return $this->belongsToMany(Event::class, 'schedule_events', 'schedule_id', 'event_id');
+        return $this->belongsToMany(\App\Models\Event::class, 'schedule_events', 'schedule_id', 'event_id');
     }
 
     public function convertToJson($from_date = null, $to_date = null){
@@ -107,8 +115,18 @@ class Schedule extends Model
         foreach ($scheduleData->schedule as $day) {
             foreach ($day as $hour) {
                 foreach ($hour as $event) {
+                    if($events->where('name', $event->name)
+                            ->where('from_hour', $event->from_hour)
+                            ->where('to_hour', $event->to_hour)
+                            ->where('day', $event->day)
+                            ->where('start_date', $event->start_date)
+                            ->first() !== null){
+                        continue;
+                    }
+
                     $data = collect($event);
-                    $e = new Event($data->toArray());
+                    $e = new \App\Models\Event($data->toArray());
+                    $e->eid = rand(10000, 99999);
                     $events->push($e);
                 }
             }
@@ -139,7 +157,29 @@ class Schedule extends Model
         foreach ($events as $event) {
             $data = collect($event)->toArray();
             $e = new Event($data);
+            $e->eid = rand(10000, 99999);
             $this->events->push($e);
         }
+    }
+
+    public static function generateIcal(Schedule $schedule){
+        $calendar = Calendar::create($schedule->name);
+        $events = [];
+
+        foreach($schedule->events as $event){
+            $e = json_decode(json_encode($event));
+
+            $rrule = $event->end_date ?
+                RRule::frequency(RecurrenceFrequency::Weekly)->until(new DateTime($e->end_date))
+                :
+                RRule::frequency(RecurrenceFrequency::Weekly);
+
+            $events[] = Event::create($e->name)
+                ->startsAt(new DateTime($e->start_date.' '.$e->from_hour.':00'))
+                ->endsAt(new DateTime($e->start_date.' '.$e->to_hour.':00'))
+                ->rrule($rrule);
+        }
+
+        return $calendar->event($events)->toString();
     }
 }

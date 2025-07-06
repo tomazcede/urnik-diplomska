@@ -15,6 +15,7 @@ Route::group(['prefix' => 'schedule'], function () {
     Route::post('/show', [ScheduleController::class, 'show']);
     Route::post('/store', [ScheduleController::class, 'store']);
     Route::post('/add-events', [ScheduleController::class, 'addEvents']);
+    Route::post('/export', [ScheduleController::class, 'export']);
 
     Route::post('/convert-from', function (Request $request) {
         $scheduleData = json_decode($request->json);
