@@ -55,7 +55,7 @@ class ScheduleController extends Controller
 
             return response()->json($schedule->convertToJson());
         } catch(\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], $e->getCode());
+            return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 

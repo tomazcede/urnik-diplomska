@@ -53,7 +53,7 @@ class Schedule extends Model
                     $days[] = $dayName;
                 }
             } else {
-                $days = Event::AVALIABLE_DAYS;
+                $days = \App\Models\Event::AVALIABLE_DAYS;
             }
 
             foreach ($days as $day) {
@@ -111,6 +111,7 @@ class Schedule extends Model
         }
 
         $schedule->name = $scheduleData->name;
+        $ids = collect();
 
         foreach ($scheduleData->schedule as $day) {
             foreach ($day as $hour) {
@@ -126,7 +127,11 @@ class Schedule extends Model
 
                     $data = collect($event);
                     $e = new \App\Models\Event($data->toArray());
-                    $e->eid = rand(10000, 99999);
+                    do{
+                        $e->eid = rand(10000, 99999);
+                    } while($ids->contains($e->eid));
+                    $ids->push($e->eid);
+
                     $events->push($e);
                 }
             }
@@ -145,7 +150,7 @@ class Schedule extends Model
             if (!empty($eventData['id'])) {
                 $eventIds[] = $eventData['id'];
             } else {
-                $event = Event::create($eventData);
+                $event = \App\Models\Event::create($eventData);
                 $eventIds[] = $event->id;
             }
         }
@@ -154,12 +159,24 @@ class Schedule extends Model
     }
 
     public function addEventsToJson($events){
+        $ids = collect($this->events)->pluck('eid');
         foreach ($events as $event) {
             $data = collect($event)->toArray();
-            $e = new Event($data);
-            $e->eid = rand(10000, 99999);
+            $e = new \App\Models\Event($data);
+            do{
+                $e->eid = rand(10000, 99999);
+            } while($ids->contains($e->eid));
+            $ids->push($e->eid);
             $this->events->push($e);
         }
+    }
+
+    public function deleteEvent($eventId){
+        $this->events()->detach($eventId);
+    }
+
+    public function removeEventFromJson($eid){
+        $this->events()->where('eid', $eid)->delete();
     }
 
     public static function generateIcal(Schedule $schedule){
