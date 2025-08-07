@@ -46,6 +46,7 @@ class Schedule extends Model
 
             if ($from_date && $to_date) {
                 $period = CarbonPeriod::create($from_date, $to_date);
+                if($period->count() > 7) throw new \Exception("More than 7 days");
                 $days = [];
 
                 foreach ($period as $date) {

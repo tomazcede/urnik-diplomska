@@ -14,11 +14,10 @@ class ScheduleController extends Controller
         try {
             $schedule = $request->id && $request->id != null ? Schedule::find($request->id) : Schedule::convertFromJson($request->json);
 
-            if($request->from && $request->to){
-                return response()->json($schedule->convertToJson($request->from, $request->to));
-            }
-
-            return response()->json($schedule->convertToJson());
+            return $request->from && $request->to ?
+                response()->json($schedule->convertToJson($request->from, $request->to))
+                :
+                response()->json($schedule->convertToJson());
         } catch(\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
