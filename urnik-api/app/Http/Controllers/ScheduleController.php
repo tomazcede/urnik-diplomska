@@ -30,6 +30,9 @@ class ScheduleController extends Controller
                 'user_id' => 'required|integer|exists:users,id',
             ]);
 
+            if(auth()->user()->id !== $validate['user_id'])
+                return response("Action prohibited", 403);
+
             $schedule = Schedule::create($validate);
 
             if($request->events){
@@ -49,6 +52,9 @@ class ScheduleController extends Controller
                 $schedule->addEventsToJson($request->events);
             } else {
                 $schedule = Schedule::find($request->id);
+                if(auth()->user()->id !== $schedule->user_id)
+                    return response("Action prohibited", 403);
+
                 $schedule->addEvents($request->events);
             }
 
