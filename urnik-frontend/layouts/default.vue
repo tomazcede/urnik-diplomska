@@ -10,8 +10,10 @@
     </div>
     <div class="p-2 w-100 flex">
       <div class="ml-auto flex gap-4">
-        <button>
-          {{ $t('switch_locale') }}
+        <button @click="locale = locale == 'sl' ? 'en' : 'sl'">
+          {{ $t('switch_locale') }}:
+          <span v-if="locale == 'sl'"> Angleščina</span>
+          <span v-if="locale == 'en'"> Slovenian</span>
         </button>
         <button v-if="!userStore.user" @click="loginModalOpen">
           {{ $t('login') }}
@@ -33,10 +35,12 @@ import {useFacultyStore} from "~/stores/faculty";
 import {useUserStore} from "~/stores/user";
 import LoginModal from "~/components/modals/loginModal.vue";
 import RegisterModal from "~/components/modals/registerModal.vue";
+import {useI18n} from "vue-i18n";
 
 const modalStore = useModalStore()
 const facultyStore = useFacultyStore()
 const userStore = useUserStore()
+const { locale } = useI18n()
 
 const email = ref("")
 
