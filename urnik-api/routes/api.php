@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\FacultyController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\UserController;
 use App\Models\Event;
@@ -19,6 +21,13 @@ Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'user'], function () {
     Route::post('/delete/{user}', [UserController::class, 'delete']);
 });
 
+Route::group(['prefix' => 'auth', 'middleware' => 'web'], function () {
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/current', [UserController::class, 'getCurrent']);
+});
+
 Route::group(['prefix' => 'schedule'], function () {
     Route::post('/show', [ScheduleController::class, 'show']);
     Route::post('/store', [ScheduleController::class, 'store']);
@@ -31,4 +40,8 @@ Route::group(['prefix' => 'event'], function () {
     Route::post('/show/{event}', [EventController::class, 'show']);
     Route::post('/paginate', [EventController::class, 'paginate']);
     Route::post('/parse', [EventController::class, 'parseEvents']);
+});
+
+Route::group(['prefix' => 'faculty'], function () {
+    Route::post('/all', [FacultyController::class, 'all']);
 });

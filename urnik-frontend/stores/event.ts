@@ -28,5 +28,26 @@ export const useEventStore = defineStore('event', {
                 return []
             }
         },
+
+        async paginate(page: number, search: string){
+            const config = useRuntimeConfig()
+            const url = `${config.public.apiUrl}/api/event/paginate`
+
+            try {
+                const data = await $fetch(url, {
+                    method: 'POST',
+                    body: {
+                        page,
+                        search
+                    }
+                })
+
+                console.log(data);
+            } catch (error) {
+                console.error(error)
+
+                return []
+            }
+        }
     }
 })

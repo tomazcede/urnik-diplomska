@@ -33,6 +33,10 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    protected $appends = [
+        'default_schedule'
+    ];
+
     /**
      * Get the attributes that should be cast.
      *
@@ -48,5 +52,9 @@ class User extends Authenticatable
 
     public function schedules() {
         return $this->hasMany(Schedule::class);
+    }
+
+    public function getDefaultScheduleAttribute() {
+        return $this->schedules()->first();
     }
 }

@@ -21,5 +21,12 @@
   "add_to_schedule": "Add to schedule",
   "faculty": "Faculty",
   "file": "File",
-  "import": "Import"
+  "import": "Import",
+  "login": "Login",
+  "email": "Email",
+  "password": "Password",
+  "logging_in": "Logging in...",
+  "switch_locale": "Switch language",
+  "register": "Register",
+  "select_faculty": "Select faculty"
 }

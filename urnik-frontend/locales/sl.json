@@ -21,5 +21,12 @@
   "add_to_schedule": "Dodaj na urnik",
   "faculty": "Fakulteta",
   "file": "Datoteka",
-  "import": "Uvozi"
+  "import": "Uvozi",
+  "login": "Prijava",
+  "email": "Email",
+  "password": "Geslo",
+  "logging_in": "Prijavljanje...",
+  "switch_locale": "Zamenjaj jezik",
+  "register": "Registracija",
+  "select_faculty": "Izberi fakulteto"
 }

@@ -27,4 +27,9 @@ class UserController extends Controller
         $user->save();
         return response()->json($user);
     }
+
+    public function getCurrent(Request $request)
+    {
+        return response()->json(['user' => $request->user()]);
+    }
 }
