@@ -172,7 +172,7 @@ class Schedule extends Model
         }
     }
 
-    public function deleteEvent($eventId){
+    public function removeEvent($eventId){
         $this->events()->detach($eventId);
     }
 

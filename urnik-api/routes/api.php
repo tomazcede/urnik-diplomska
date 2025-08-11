@@ -23,6 +23,7 @@ Route::group(['prefix' => 'schedule'], function () {
     Route::post('/show', [ScheduleController::class, 'show']);
     Route::post('/store', [ScheduleController::class, 'store']);
     Route::post('/add-events', [ScheduleController::class, 'addEvents']);
+    Route::post('/remove-event', [ScheduleController::class, 'removeEvent']);
     Route::post('/export', [ScheduleController::class, 'export']);
 });
 

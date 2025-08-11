@@ -64,6 +64,25 @@ class ScheduleController extends Controller
         }
     }
 
+    public function removeEvent(Request $request) {
+        try {
+            if($request->json) {
+                $schedule = Schedule::convertFromJson($request->json);
+                $schedule->removeEventFromJson($request->event_id);
+            } else {
+                $schedule = Schedule::find($request->id);
+                if(auth()->user()->id !== $schedule->user_id)
+                    return response("Action prohibited", 403);
+
+                $schedule->removeEvent($request->event_id);
+            }
+
+            return response()->json($schedule->convertToJson());
+        } catch(\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
     public function export(Request $request) {
         try {
             if($request->json) {
