@@ -7,5 +7,19 @@
   "sat": "Saturday",
   "sun": "Sunday",
 
-  "add_new_event": "Add new event"
+  "add_new_event": "Add new event",
+  "new_event": "Add event",
+  "import_events": "Import events",
+  "name": "Name",
+  "from_hour": "From hour",
+  "to_hour": "To hour",
+  "location": "Location",
+  "start_date": "Start date",
+  "end_date": "End date",
+  "day": "Day",
+  "add_to_list": "Add to list",
+  "add_to_schedule": "Add to schedule",
+  "faculty": "Faculty",
+  "file": "File",
+  "import": "Import"
 }

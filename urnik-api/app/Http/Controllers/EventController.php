@@ -34,4 +34,14 @@ class EventController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+
+    public function parseEvents(Request $request) {
+        $file = $request->file('file');
+//        $content = file_get_contents($file->getRealPath());
+//        return response()->json($content);
+
+        $events = Event::parseEventsFromFile($file, $request->faculty_id);
+
+        return response()->json(compact('events'));
+    }
 }

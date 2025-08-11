@@ -7,5 +7,19 @@
   "sat": "Sobota",
   "sun": "Nedelja",
 
-  "add_new_event": "Dodaj nov dogodek"
+  "add_new_event": "Dodaj nov dogodek",
+  "new_event": "Nov dogodek",
+  "import_events": "Uvozi dogodke",
+  "name": "Ime",
+  "from_hour": "Od ure",
+  "to_hour": "Do ure",
+  "location": "Lokacija",
+  "start_date": "Datum začetka",
+  "end_date": "Datum konca",
+  "day": "Dan",
+  "add_to_list": "Dodaj na seznam",
+  "add_to_schedule": "Dodaj na urnik",
+  "faculty": "Fakulteta",
+  "file": "Datoteka",
+  "import": "Uvozi"
 }
