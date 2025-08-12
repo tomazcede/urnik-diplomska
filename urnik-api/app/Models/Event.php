@@ -16,6 +16,7 @@ class Event extends Model
         'start_date',
         'end_date',
         'day',
+        'color'
     ];
 
     const AVALIABLE_DAYS = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];

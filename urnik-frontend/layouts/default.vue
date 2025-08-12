@@ -2,6 +2,7 @@
   <div>
     <modal class="z-30">
       <add-event-modal v-if="modalStore.modalType == 'addEvent'" />
+      <edit-event-modal v-if="modalStore.modalType == 'editEvent'" />
       <login-modal v-if="modalStore.modalType == 'login'" />
       <register-modal v-if="modalStore.modalType == 'register'" />
     </modal>
@@ -15,11 +16,11 @@
           <span v-if="locale == 'sl'"> Angleščina</span>
           <span v-if="locale == 'en'"> Slovenian</span>
         </button>
-        <button v-if="!userStore.user" @click="loginModalOpen">
+        <button v-if="!user" @click="loginModalOpen">
           {{ $t('login') }}
         </button>
         <span v-else @click="userStore.logout()">
-          {{ userStore.user?.email }}
+          {{ user.email }}
         </span>
       </div>
     </div>
@@ -36,26 +37,22 @@ import {useUserStore} from "~/stores/user";
 import LoginModal from "~/components/modals/loginModal.vue";
 import RegisterModal from "~/components/modals/registerModal.vue";
 import {useI18n} from "vue-i18n";
+import EditEventModal from "~/components/modals/editEventModal.vue";
 
 const modalStore = useModalStore()
 const facultyStore = useFacultyStore()
 const userStore = useUserStore()
 const { locale } = useI18n()
 
-const email = ref("")
+const user = computed(() => userStore.user)
 
 async function loginModalOpen(){
   modalStore.isVisible = true
   modalStore.modalType = 'login'
 }
 
-onMounted(async () => {
-  await facultyStore.fetchFaculties()
-  await userStore.getCurrentUser()
-
-  console.log(userStore.user)
-  if(userStore.user && userStore.user.email)
-    email.value = userStore.user.email
+watch(() => userStore.user, (newVal) => {
+  console.log('User changed:', newVal)
 })
 </script>
 

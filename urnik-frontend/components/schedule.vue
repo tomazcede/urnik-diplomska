@@ -57,8 +57,10 @@
           >
             <div
                 class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded shadow-sm"
+                :style="event.color ? 'background-color: ' + event.color + ';' : ''"
                 v-for="event in schedule[day][hour]"
                 :key="event.id"
+                @click = "eventStore.openEditModal(event)"
             >
               {{ formatMobile(event.name) }}
             </div>
@@ -82,9 +84,13 @@ import {computed} from "vue";
 import {useModalStore} from "~/stores/modal";
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
+import {useUserStore} from "~/stores/user";
+import {useEventStore} from "~/stores/event";
 
 const modalStore = useModalStore()
+const userStore = useUserStore()
 const scheduleStore = useScheduleStore()
+const eventStore = useEventStore()
 
 const schedule = computed(() => scheduleStore.schedule)
 const colors = computed(() => scheduleStore.colors)
@@ -123,7 +129,7 @@ function formatMobile(text: string) {
 
 const offset = ref(0);
 
-onMounted(() => {
+onMounted(async () => {
   const today = new Date()
 
   const hour = new Date().getHours();
@@ -144,7 +150,10 @@ onMounted(() => {
   sunday.setDate(diffToSunday)
   dateRange.value = [formatDate(monday), formatDate(sunday)];
 
-  scheduleStore.getSchedule(null, dateRange.value[0], dateRange.value[1]);
+  await userStore.getCurrentUser()
+  const id = userStore.user?.default_schedule?.id ?? null
+
+  scheduleStore.getSchedule(id, dateRange.value[0], dateRange.value[1]);
 
   setInterval(() => {
     const hour = new Date().getHours();

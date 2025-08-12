@@ -12,7 +12,9 @@ export const useScheduleStore = defineStore('schedule', {
             primary_color: null,
             secondary_color: null,
             background_color: null
-        }
+        },
+        from_date: "",
+        to_date: ""
     }),
     actions: {
         async getSchedule(id: any, from: string, to:string) {
@@ -22,6 +24,8 @@ export const useScheduleStore = defineStore('schedule', {
 
             try{
                 this.currentId = id
+                this.from_date = from
+                this.to_date = to
 
                 const data = await $fetch(url, {
                     method: 'POST',
@@ -41,27 +45,72 @@ export const useScheduleStore = defineStore('schedule', {
                 this.maxHour = data.max_hour ?? 15
             }
         },
-        async addEvents(events){
+        async addEvents(events) {
             const config = useRuntimeConfig()
             const url = `${config.public.apiUrl}/api/schedule/add-events`
             let localData = localStorage.getItem('schedule')
+            const { $axios } = useNuxtApp()
 
-            try{
+            try {
                 const postdata = {
                     events: events,
                     ...(this.currentId ? { id: this.currentId } : { json: localData })
-                };
+                }
 
-                const data = await $fetch(url, {
-                    method: 'POST',
-                    body: postdata
+                const { data } = await $axios.post(url, postdata, {
+                    withCredentials: true
                 })
 
                 this.setSchedule(data)
             } catch (error) {
-                console.log(error)
+                console.error(error)
             }
         },
+
+        async updateEvent(event: object) {
+            const config = useRuntimeConfig()
+            const url = `${config.public.apiUrl}/api/event/update`
+            let localData = localStorage.getItem('schedule')
+            const { $axios } = useNuxtApp()
+
+            try {
+                const postdata = {
+                    event: event,
+                    ...(this.currentId ? { schedule_id: this.currentId } : { json: localData })
+                }
+
+                const { data } = await $axios.post(url, postdata, {
+                    withCredentials: true
+                })
+
+                this.setSchedule(data)
+            } catch (error) {
+                console.error(error)
+            }
+        },
+
+        async removeEvent(event_id: string) {
+            const config = useRuntimeConfig()
+            const url = `${config.public.apiUrl}/api/schedule/remove-event`
+            let localData = localStorage.getItem('schedule')
+            const { $axios } = useNuxtApp()
+
+            try {
+                const postdata = {
+                    event_id: event_id,
+                    ...(this.currentId ? { id: this.currentId } : { json: localData })
+                }
+
+                const { data } = await $axios.post(url, postdata, {
+                    withCredentials: true
+                })
+
+                this.setSchedule(data)
+            } catch (error) {
+                console.error(error)
+            }
+        },
+
 
         setSchedule(data: object){
             localStorage.setItem('schedule', JSON.stringify(data))

@@ -1,9 +1,11 @@
 import { defineStore } from 'pinia'
 import { useRuntimeConfig } from "#app";
+import {useModalStore} from "~/stores/modal";
 
 export const useEventStore = defineStore('event', {
     state: () => ({
-        events: []
+        events: [],
+        event: {}
     }),
     actions: {
         async parseFromFile(schedule_import: object) {
@@ -48,6 +50,14 @@ export const useEventStore = defineStore('event', {
 
                 return []
             }
+        },
+
+        openEditModal(event: object) {
+            const modalstore = useModalStore()
+
+            this.event = event
+            modalstore.modalType = "editEvent"
+            modalstore.isVisible = true
         }
     }
 })

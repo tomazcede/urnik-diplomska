@@ -28,5 +28,9 @@
   "logging_in": "Logging in...",
   "switch_locale": "Switch language",
   "register": "Register",
-  "select_faculty": "Select faculty"
+  "select_faculty": "Select faculty",
+  "color": "Color",
+  "delete": "Delete",
+  "save_changes": "Save changes",
+  "edit_event": "Edit event"
 }

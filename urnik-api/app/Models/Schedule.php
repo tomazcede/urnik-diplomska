@@ -128,9 +128,15 @@ class Schedule extends Model
 
                     $data = collect($event);
                     $e = new \App\Models\Event($data->toArray());
-                    do{
-                        $e->eid = rand(10000, 99999);
-                    } while($ids->contains($e->eid));
+
+                    if(isset($data['eid']))
+                        $e->eid = $data['eid'];
+                    else{
+                        do{
+                            $e->eid = rand(10000, 99999);
+                        } while($ids->contains($e->eid));
+                    }
+
                     $ids->push($e->eid);
 
                     $events->push($e);
@@ -177,7 +183,15 @@ class Schedule extends Model
     }
 
     public function removeEventFromJson($eid){
-        $this->events()->where('eid', $eid)->delete();
+        $this->events = $this->events->filter(function ($event) use ($eid){
+            return $event->eid != $eid;
+        });
+    }
+
+    public function updateEvent($data){
+        $this->removeEventFromJson($data['eid']);
+
+        $this->addEventsToJson([$data]);
     }
 
     public static function generateIcal(Schedule $schedule){

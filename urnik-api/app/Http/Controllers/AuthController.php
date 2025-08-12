@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Schedule;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -14,18 +15,16 @@ class AuthController extends Controller
             'password' => 'required|string'
         ]);
 
-        if (!auth()->attempt($data)) {
-            return response(['message' => 'Invalid Credentials'], 401);
+        if (!Auth::attempt($data)) {
+            return response()->json(['message' => 'Invalid login'], 401);
         }
 
         $request->session()->regenerate();
 
-        $user = auth()->user();
-
-        return response(['user' => $user]);
+        return response()->json(['user' => Auth::user()]);
     }
     public function logout(){
-        auth()->logout();
+        Auth::logout();
     }
 
     public function register(Request $request){
@@ -40,7 +39,7 @@ class AuthController extends Controller
             $data['password'] = bcrypt($data['password']);
 
             $user = User::create($data);
-            auth()->login($user);
+            Auth::login($user);
 
             Schedule::create([
                 'user_id' => $user->id,

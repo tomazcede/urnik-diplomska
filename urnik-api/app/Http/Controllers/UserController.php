@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -30,6 +31,13 @@ class UserController extends Controller
 
     public function getCurrent(Request $request)
     {
-        return response()->json(['user' => $request->user()]);
+        $user = $request->user();
+
+        if($user) {
+            Auth::loginUsingId($user->id);
+            return response()->json(['user' => $user]);
+        }
+
+        return response()->json(['error' => 'Unauthorized'], 200);
     }
 }

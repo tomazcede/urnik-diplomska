@@ -28,5 +28,9 @@
   "logging_in": "Prijavljanje...",
   "switch_locale": "Zamenjaj jezik",
   "register": "Registracija",
-  "select_faculty": "Izberi fakulteto"
+  "select_faculty": "Izberi fakulteto",
+  "color": "Barva",
+  "delete": "Zbriši",
+  "save_changes": "Shrani spremembe",
+  "edit_event": "Uredi dogodek"
 }

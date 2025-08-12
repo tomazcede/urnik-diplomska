@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Event;
 use App\Models\Schedule;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -30,8 +31,8 @@ class ScheduleController extends Controller
                 'user_id' => 'required|integer|exists:users,id',
             ]);
 
-            if(auth()->user()->id !== $validate['user_id'])
-                return response("Action prohibited", 403);
+//            if(auth()->user()->id !== $validate['user_id'])
+//                return response("Action prohibited", 403);
 
             $schedule = Schedule::create($validate);
 
@@ -52,8 +53,9 @@ class ScheduleController extends Controller
                 $schedule->addEventsToJson($request->events);
             } else {
                 $schedule = Schedule::find($request->id);
-                if(auth()->user()->id !== $schedule->user_id)
-                    return response("Action prohibited", 403);
+//
+//                if(auth()->user()->id !== $schedule->user_id)
+//                    return response("Action prohibited", 403);
 
                 $schedule->addEvents($request->events);
             }
@@ -71,8 +73,8 @@ class ScheduleController extends Controller
                 $schedule->removeEventFromJson($request->event_id);
             } else {
                 $schedule = Schedule::find($request->id);
-                if(auth()->user()->id !== $schedule->user_id)
-                    return response("Action prohibited", 403);
+//                if(auth()->user()->id !== $schedule->user_id)
+//                    return response("Action prohibited", 403);
 
                 $schedule->removeEvent($request->event_id);
             }

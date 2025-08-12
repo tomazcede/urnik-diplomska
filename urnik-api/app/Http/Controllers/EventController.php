@@ -42,4 +42,21 @@ class EventController extends Controller
 
         return response()->json(compact('events'));
     }
+
+    public function update(Request $request) {
+        try{
+            if($request->json) {
+                $schedule = Schedule::convertFromJson($request->json);
+                $schedule->updateEvent($request->event);
+            } else {
+                $schedule = Schedule::find($request->schedule_id);
+                $event = Event::find($request->event['id']);
+                $event->update($request->event);
+            }
+
+            return response()->json($schedule->convertToJson());
+        } catch(\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
 }

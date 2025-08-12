@@ -40,6 +40,7 @@ Route::group(['prefix' => 'event'], function () {
     Route::post('/show/{event}', [EventController::class, 'show']);
     Route::post('/paginate', [EventController::class, 'paginate']);
     Route::post('/parse', [EventController::class, 'parseEvents']);
+    Route::post('/update', [EventController::class, 'update']);
 });
 
 Route::group(['prefix' => 'faculty'], function () {
