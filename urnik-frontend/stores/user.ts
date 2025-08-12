@@ -62,8 +62,6 @@ export const useUserStore = defineStore('user', {
                     this.user = data.user
                     this.errors = {}
                 })
-
-                this.user = data.user
             } catch (error) {
                 console.log(error)
             }
@@ -74,13 +72,26 @@ export const useUserStore = defineStore('user', {
                 const config = useRuntimeConfig()
                 const url = `${config.public.apiUrl}/api/auth/register`
 
-                const data = await $fetch(url, {
-                    method: 'POST',
-                    body: payload
-                })
+                await $fetch(`${config.public.apiUrl}/sanctum/csrf-cookie`, {
+                    credentials: 'include'
+                }).then(async () => {
+                    const value = `; ${document.cookie}`
+                    const parts = value.split(`; XSRF-TOKEN=`)
+                    let token = decodeURIComponent(parts.pop().split(';').shift())
 
-                this.user = data.user
-                this.errors = {}
+                    const data = await $fetch(url, {
+                        method: 'POST',
+                        body: payload,
+                        credentials: 'include',
+                        headers: {
+                            'Accept': 'application/json',
+                            'X-XSRF-TOKEN': token,
+                        },
+                    })
+
+                    this.user = data.user
+                    this.errors = {}
+                })
             } catch (error: any) {
                 this.errors = error?.data?.errors || {}
                 throw error?.data || error
@@ -111,9 +122,6 @@ export const useUserStore = defineStore('user', {
                     this.user = null
                     this.errors = {}
                 })
-
-                this.user = null
-                this.errors = {}
             } catch (error: any) {
                 this.errors = error?.data?.errors || {}
                 throw error?.data || error
