@@ -188,7 +188,7 @@ class Schedule extends Model
         });
     }
 
-    public function updateEvent($data){
+    public function updateJsonEvent($data){
         $this->removeEventFromJson($data['eid']);
 
         $this->addEventsToJson([$data]);

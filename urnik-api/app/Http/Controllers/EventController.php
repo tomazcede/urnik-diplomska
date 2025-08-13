@@ -47,7 +47,7 @@ class EventController extends Controller
         try{
             if($request->json) {
                 $schedule = Schedule::convertFromJson($request->json);
-                $schedule->updateEvent($request->event);
+                $schedule->updateJsonEvent($request->event);
             } else {
                 $schedule = Schedule::find($request->schedule_id);
                 $event = Event::find($request->event['id']);

@@ -61,10 +61,12 @@ async function doLogin() {
   try {
     await userStore.login(credentials.value)
 
-    if(userStore.user && userStore.user.default_schedule)
+    if(userStore.user && userStore.user.default_schedule){
       await scheduleStore.getSchedule(userStore.user.default_schedule.id, scheduleStore.from_date, scheduleStore.to_date)
-
-    modalStore.closeModal()
+      modalStore.closeModal()
+    } else {
+      error.value = 'Login failed'
+    }
   } catch (err) {
     console.log(err)
     error.value = err?.message || 'Login failed'

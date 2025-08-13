@@ -15,7 +15,7 @@
       </VueDatePicker>
     </div>
 
-    <button class="absolute right-2 top-0" :title="$t('add_new_event')" @click="sendData">
+    <button class="absolute right-10 md:right-40 top-0" :title="$t('add_new_event')" @click="sendData">
         +
     </button>
   </div>

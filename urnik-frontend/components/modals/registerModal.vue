@@ -71,12 +71,12 @@ const form = ref({
 const loading = ref(false)
 const error = ref<string | null>(null)
 const errors = ref<Record<string, string>>({})
-const faculties = ref([])
+const faculties = computed(() => facultyStore.faculties)
 
-onMounted(async () => {
-  // await facultyStore.loadFaculties()
-  faculties.value = facultyStore.faculties
-})
+// onMounted(async () => {
+//   // await facultyStore.loadFaculties()
+//   faculties.value = facultyStore.faculties
+// })
 
 async function doRegister() {
   loading.value = true

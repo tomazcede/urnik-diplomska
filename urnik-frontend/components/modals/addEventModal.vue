@@ -3,7 +3,11 @@
     <div class="bg-white w-75 md:w-50 opacity-100 text-black p-2 md:p-4" style="height: fit-content">
       <div class="w-full flex mb-2">
         <div class="flex gap-4">
-          <button v-for="tab_btn in tabs" @click="tab = tab_btn.tab">{{ $t(tab_btn.name) }}</button>
+          <button v-for="tab_btn in tabs"
+                  @click="tab = tab_btn.tab"
+                  :disabled="tab == tab_btn.tab"
+                  :style="tab == tab_btn.tab ? 'color: gray' : ''"
+          >{{ $t(tab_btn.name) }}</button>
         </div>
         <div class="ml-auto">
           <span @click="modalStore.closeModal" class="cursor-pointer">x</span>
@@ -43,7 +47,13 @@
 
       <div v-if="tab == 'import'" class="flex flex-col">
         <label>{{ $t('faculty') }}</label>
-        <input type="text" class="border" v-model="schedule_import.faculty_id" />
+<!--        <input type="text" class="border" v-model="schedule_import.faculty_id" />-->
+        <select class="border" v-model="schedule_import.faculty_id">
+          <option value="">{{ $t('select_faculty') }}</option>
+          <option v-for="fac in faculties" :key="fac.id" :value="fac.id">
+            {{ fac.name }}
+          </option>
+        </select>
 
         <label>{{ $t('file') }}</label>
         <input type="file" @change="handleFileChanged"/>
@@ -82,11 +92,13 @@ import { ref } from 'vue'
 import {useScheduleStore} from "~/stores/schedule";
 import {useEventStore} from "~/stores/event";
 import {useModalStore} from "~/stores/modal";
+import {useFacultyStore} from "~/stores/faculty";
 
 const events = ref<any[]>([])
 const scheduleStore = useScheduleStore()
 const eventStore = useEventStore()
 const modalStore = useModalStore()
+const facultyStore = useFacultyStore()
 const tab = ref('new')
 const tabs = [
   {
@@ -122,6 +134,7 @@ const schedule_import = ref({
   file: null
 })
 
+const faculties = computed(() => facultyStore.faculties)
 
 function addToList() {
   events.value.push({ ...event.value })

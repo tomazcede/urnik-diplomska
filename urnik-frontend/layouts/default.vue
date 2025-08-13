@@ -54,6 +54,10 @@ async function loginModalOpen(){
 watch(() => userStore.user, (newVal) => {
   console.log('User changed:', newVal)
 })
+
+onMounted(() => {
+  facultyStore.fetchFaculties()
+})
 </script>
 
 <style scoped>
