@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 //    return $request->user();
 //})->middleware('auth:sanctum');
 
-Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'user'], function () {
+Route::group(['middleware' => ['auth:sanctum', 'web'], 'prefix' => 'user'], function () {
     Route::post('/show/{user}', [UserController::class, 'show']);
     Route::post('/store/{user}', [UserController::class, 'store']);
     Route::post('/delete/{user}', [UserController::class, 'delete']);
@@ -34,6 +34,7 @@ Route::group(['prefix' => 'schedule'], function () {
     Route::post('/add-events', [ScheduleController::class, 'addEvents']);
     Route::post('/remove-event', [ScheduleController::class, 'removeEvent']);
     Route::post('/export', [ScheduleController::class, 'export']);
+    Route::post('/update', [ScheduleController::class, 'update']);
 });
 
 Route::group(['prefix' => 'event'], function () {

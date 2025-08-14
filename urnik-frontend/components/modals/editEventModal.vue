@@ -25,6 +25,8 @@
         <div class="flex gap-2 align-items-center">
           <input type="color" v-model="editedEvent.color" />
           <span>{{editedEvent.color}}</span>
+
+          <button @click="editedEvent.color = null">{{ $t('reset') }}</button>
         </div>
 
         <div class="flex flex-col md:flex-row gap-4">

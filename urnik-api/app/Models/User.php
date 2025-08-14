@@ -37,6 +37,19 @@ class User extends Authenticatable
         'default_schedule'
     ];
 
+    public static function boot()
+    {
+        parent::boot();
+
+        self::deleting(function($user){
+            $user->schedules()->each(function($schedule){
+                $schedule->events()->detach();
+            });
+
+            $user->schedules()->delete();
+        });
+    }
+
     /**
      * Get the attributes that should be cast.
      *

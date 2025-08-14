@@ -1,7 +1,7 @@
 <template>
   <div class="w-full h-full flex justify-center items-center">
     <div
-        class="bg-white w-75 md:w-50 opacity-100 text-black p-2 md:p-4"
+        class="bg-white w-50 opacity-100 text-black p-2 md:p-4"
         style="height: fit-content"
     >
       <div class="w-full flex mb-2">
@@ -53,14 +53,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { useModalStore } from '~/stores/modal'
 import { useUserStore } from '~/stores/user'
 import { useFacultyStore } from '~/stores/faculty'
+import {useScheduleStore} from "~/stores/schedule";
 
 const modalStore = useModalStore()
 const userStore = useUserStore()
 const facultyStore = useFacultyStore()
+const scheduleStore = useScheduleStore()
 
 const form = ref({
   name: '',
@@ -85,7 +87,13 @@ async function doRegister() {
 
   try {
     await userStore.register(form.value)
-    modalStore.closeModal()
+
+    if(userStore.user && userStore.user.default_schedule){
+      await scheduleStore.getSchedule(userStore.user.default_schedule.id, scheduleStore.from_date, scheduleStore.to_date)
+      modalStore.closeModal()
+    } else {
+      error.value = 'Login failed'
+    }
   } catch (err) {
     console.log(err)
     error.value = err?.message || 'Registration failed'

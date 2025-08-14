@@ -11,7 +11,3 @@ const modalStore = useModalStore()
 
 const isVisible = computed(() => modalStore.isVisible)
 </script>
-
-<style scoped>
-
-</style>

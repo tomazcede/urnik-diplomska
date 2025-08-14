@@ -12,8 +12,10 @@ class UserController extends Controller
         return response()->json($user);
     }
 
-    public function delete(User $user){
-        if(auth()->user()->id !== $user->id)
+    public function delete(Request $request, User $user){
+        $current = $request->user();
+
+        if($current->id !== $user->id)
             return response("Action prohibited", 403);
 
         $user->delete();

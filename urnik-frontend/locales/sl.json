@@ -32,5 +32,12 @@
   "color": "Barva",
   "delete": "Zbriši",
   "save_changes": "Shrani spremembe",
-  "edit_event": "Uredi dogodek"
+  "edit_event": "Uredi dogodek",
+  "edit_schedule": "Uredi urnik",
+  "primary_color": "Primarna barva",
+  "secondary_color": "Sekundarna barva",
+  "background_color": "Barva ozadja",
+  "reset": "Ponastavi",
+  "export": "Izvozi",
+  "logout": "Odjava"
 }

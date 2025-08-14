@@ -25,6 +25,8 @@ class AuthController extends Controller
     }
     public function logout(){
         Auth::logout();
+
+        return response()->json(['message' => 'Successfully logged out']);
     }
 
     public function register(Request $request){
@@ -47,6 +49,7 @@ class AuthController extends Controller
             ]);
 
             $user->refresh();
+            $request->session()->regenerate();
 
             return response(['user' => $user]);
         } catch(\Exception $e){

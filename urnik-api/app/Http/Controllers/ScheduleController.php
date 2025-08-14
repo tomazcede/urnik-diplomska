@@ -46,6 +46,37 @@ class ScheduleController extends Controller
         }
     }
 
+    public function update(Request $request) {
+        try {
+            if($request->json) {
+                $schedule = Schedule::convertFromJson($request->json);
+
+                $schedule->name = $request->name;
+                $schedule->primary_color = $request->primary_color;
+                $schedule->secondary_color = $request->secondary_color;
+                $schedule->background_color = $request->background_color;
+            } else {
+                $schedule = Schedule::find($request->id);
+//
+//                if(auth()->user()->id !== $schedule->user_id)
+//                    return response("Action prohibited", 403);
+
+                $validate = $request->validate([
+                    'name' => 'required|string',
+                    'primary_color' => 'sometimes|string|nullable',
+                    'secondary_color' => 'sometimes|string|nullable',
+                    'background_color' => 'sometimes|string|nullable',
+                ]);
+
+                $schedule->update($validate);
+            }
+
+            return response()->json($schedule->convertToJson());
+        } catch(\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
     public function addEvents(Request $request) {
         try {
             if($request->json) {
@@ -100,7 +131,9 @@ class ScheduleController extends Controller
 
             file_put_contents($path, $data);
 
-            return response()->download($path)->deleteFileAfterSend(true);
+            return response()->download($path, $filename, [
+                'Content-Type' => 'text/calendar',
+            ])->deleteFileAfterSend();
         } catch(\Exception $e) {
             return response()->json(['error' => $e->getMessage()], $e->getCode());
         }

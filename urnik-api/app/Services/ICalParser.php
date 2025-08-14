@@ -54,7 +54,7 @@ class ICalParser
             'location'   => $event['LOCATION'] ?? null,
             'is_public'  => $faculty_id ? true : false,
             'faculty_id' => $faculty_id,
-            'start_date' => now(),
+            'start_date' => now()->format('Y-m-d'),
             'end_date'   => $until ? $until->format('Y-m-d') : null,
             'day'        => $from ? strtolower($from->format('D')) : null,
         ];

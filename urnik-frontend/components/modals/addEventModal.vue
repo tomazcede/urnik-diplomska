@@ -27,6 +27,13 @@
         <label>{{ $t('location') }}</label>
         <input type="text" class="border" v-model="event.location" />
 
+        <label>{{ $t('color') }}</label>
+        <div class="flex gap-2 align-items-center">
+          <input type="color" v-model="event.color" />
+          <span>{{event.color}}</span>
+          <button @click="event.color = null">{{ $t('reset') }}</button>
+        </div>
+
         <div class="flex flex-col md:flex-row gap-4">
           <div class="flex flex-col">
             <label>{{ $t('start_date') }}</label>
@@ -126,7 +133,8 @@ const event = ref({
   location: '',
   start_date: today,
   end_date: '',
-  day: 'mon'
+  day: 'mon',
+  color: null
 })
 
 const schedule_import = ref({
@@ -163,7 +171,8 @@ function resetEvent() {
     to_hour: 8,
     location: '',
     start_date: today,
-    end_date: ''
+    end_date: '',
+    color: null
   }
 }
 

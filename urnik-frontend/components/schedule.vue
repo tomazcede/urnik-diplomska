@@ -15,12 +15,18 @@
       </VueDatePicker>
     </div>
 
-    <button class="absolute right-10 md:right-40 top-0" :title="$t('add_new_event')" @click="sendData">
-        +
+    <button class="absolute right-10 md:right-40 top-4" :title="$t('add_new_event')" @click="sendData">
+      <img :src="'/img/add.png'" alt="Edit" width="20" height="20" />
     </button>
   </div>
-  <div>
-    <table class="w-full md:w-[75%] mx-auto table-fixed border-collapse border border-gray-300 text-xs">
+  <div class="hoverdiv relative group w-full md:w-[75%] mx-auto">
+    <button
+        class="hoverbtn absolute top-2 right-2 rounded shadow z-10"
+        @click="openEditScheduleModal"
+    >
+      <img :src="'/img/edit.png'" alt="Edit" width="20" height="20" />
+    </button>
+    <table class="w-full table-fixed border-collapse border border-gray-300 text-xs">
       <thead>
       <tr :style="colors.primary_color ? 'background-color: ' + colors.primary_color + ';' : 'background-color: var(--color-gray-100);'">
         <th v-if="!isMobile" class="border border-gray-300 p-2 w-20"></th>
@@ -57,7 +63,7 @@
           >
             <div
                 class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded shadow-sm"
-                :style="event.color ? 'background-color: ' + event.color + ';' : ''"
+                :style="event.color ? 'background-color: ' + event.color + '; color: black;' : ''"
                 v-for="event in schedule[day][hour]"
                 :key="event.id"
                 @click = "eventStore.openEditModal(event)"
@@ -102,7 +108,9 @@ const hours = computed(() => {
 })
 
 function datesChanged(){
-  scheduleStore.getSchedule(null, dateRange.value[0], dateRange.value[1]);
+  const id = userStore.user?.default_schedule?.id ?? null
+
+  scheduleStore.getSchedule(id, dateRange.value[0], dateRange.value[1]);
 }
 
 async function sendData(){
@@ -125,6 +133,11 @@ function formatMobile(text: string) {
     return text
 
   return text.length <= 3 ? text : text.substring(0, 3) + "."
+}
+
+function openEditScheduleModal() {
+  modalStore.isVisible = true
+  modalStore.modalType = 'editSchedule'
 }
 
 const offset = ref(0);
@@ -153,22 +166,32 @@ onMounted(async () => {
   await userStore.getCurrentUser()
   const id = userStore.user?.default_schedule?.id ?? null
 
-  scheduleStore.getSchedule(id, dateRange.value[0], dateRange.value[1]);
+  await scheduleStore.getSchedule(id, dateRange.value[0], dateRange.value[1]);
 
   setInterval(() => {
-    const hour = new Date().getHours();
-    const min = new Date().getMinutes();
+    const nowDate = new Date();
+    const hour = nowDate.getHours();
+    const min = nowDate.getMinutes();
 
-    const max = scheduleStore.maxHour - scheduleStore.minHour
-
-    let now = (hour + (min / 60)) - scheduleStore.minHour
-    offset.value = (now * 100) / max
-  }, 60000)
+    const max = scheduleStore.maxHour - scheduleStore.minHour;
+    let now = (hour + (min / 60)) - scheduleStore.minHour;
+    offset.value = ((now * 100) / max) * 0.9;
+  }, 1000);
 })
 
 const isMobile = useIsMobile()
 </script>
 
 <style scoped>
+.hoverbtn {
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.hoverdiv:hover{
+  .hoverbtn {
+    opacity: 1;
+  }
+}
 
 </style>

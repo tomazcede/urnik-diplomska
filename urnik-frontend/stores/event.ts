@@ -15,7 +15,7 @@ export const useEventStore = defineStore('event', {
             console.log(schedule_import)
             const formData = new FormData()
             formData.append('file', schedule_import.file)
-            // formData.append('faculty_id', schedule_import.faculty_id || '')
+            formData.append('faculty_id', schedule_import.faculty_id ?? null)
 
             try {
                 const data = await $fetch(url, {

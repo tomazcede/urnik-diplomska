@@ -32,5 +32,12 @@
   "color": "Color",
   "delete": "Delete",
   "save_changes": "Save changes",
-  "edit_event": "Edit event"
+  "edit_event": "Edit event",
+  "edit_schedule": "Edit schedule",
+  "primary_color": "Primary color",
+  "secondary_color": "Secondary color",
+  "background_color": "Background color",
+  "reset": "Reset",
+  "export": "Export",
+  "logout": "Log out"
 }
