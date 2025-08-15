@@ -39,5 +39,10 @@
   "background_color": "Background color",
   "reset": "Reset",
   "export": "Export",
-  "logout": "Log out"
+  "logout": "Log out",
+  "delete_account": "Delete account",
+  "confirm-password": "Confirm password",
+  "search": "Search",
+  "search_events": "Search events",
+  "add": "Add"
 }

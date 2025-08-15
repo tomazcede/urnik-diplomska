@@ -43,8 +43,8 @@ class ICalParser
 
     protected static function mapEvent($event, $faculty_id = null)
     {
-        $from = self::parseDateTime($event['DTSTART;TZID=Europe/Ljubljana;VALUE=DATE-TIME'] ?? null);
-        $to = self::parseDateTime($event['DTEND;TZID=Europe/Ljubljana;VALUE=DATE-TIME'] ?? null);
+        $from = self::parseDateTime($event['DTSTART;TZID=Europe/Ljubljana;VALUE=DATE-TIME'] ?? $event['DTSTART']);
+        $to = self::parseDateTime($event['DTEND;TZID=Europe/Ljubljana;VALUE=DATE-TIME'] ?? $event['DTEND']);
         $until = self::parseUntilDate($event['RRULE'] ?? null);
 
         return [

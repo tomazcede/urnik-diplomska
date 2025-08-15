@@ -21,15 +21,17 @@ class EventController extends Controller
             $query = Event::query()
                 ->where('is_public', true);
 
-            if($request->search){
-                $query->whereLike('name', '%'.$request->search.'%');
+            $filter = $request->filter;
+
+            if($filter['search']){
+                $query->whereLike('name', '%'.$filter['search'].'%');
             }
 
-            if($request->faculty_id){
-                $query->where('faculty_id', $request->faculty_id);
+            if($filter['faculty_id']){
+                $query->where('faculty_id', $filter['faculty_id']);
             }
 
-            return response()->json($query->paginate($request->per_page ?? 10));
+            return response()->json($query->paginate($filter['per_page'] ?? 10));
         } catch(\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }

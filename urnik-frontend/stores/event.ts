@@ -5,7 +5,9 @@ import {useModalStore} from "~/stores/modal";
 export const useEventStore = defineStore('event', {
     state: () => ({
         events: [],
-        event: {}
+        event: {},
+        search_events: [],
+        last_page: 0
     }),
     actions: {
         async parseFromFile(schedule_import: object) {
@@ -31,24 +33,22 @@ export const useEventStore = defineStore('event', {
             }
         },
 
-        async paginate(page: number, search: string){
+        async paginate(filter: object){
             const config = useRuntimeConfig()
-            const url = `${config.public.apiUrl}/api/event/paginate`
+            const url = `${config.public.apiUrl}/api/event/paginate?page=${filter.current_page}`
 
             try {
                 const data = await $fetch(url, {
                     method: 'POST',
                     body: {
-                        page,
-                        search
+                        filter: filter
                     }
                 })
 
-                console.log(data);
+                this.search_events = data.data
+                this.last_page = data.last_page
             } catch (error) {
                 console.error(error)
-
-                return []
             }
         },
 

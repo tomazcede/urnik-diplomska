@@ -1,10 +1,19 @@
+import tailwindcss from "@tailwindcss/vite";
+
 export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: [
-      '@nuxtjs/tailwindcss',
       '@pinia/nuxt',
   ],
-  css: ['bootstrap/dist/css/bootstrap.min.css'],
+  vite: {
+    plugins: [
+        tailwindcss(),
+    ],
+  },
+  css: [
+      'bootstrap/dist/css/bootstrap.min.css',
+      '/public/css/main.css'
+  ],
   app: {
     head: {
       script: [

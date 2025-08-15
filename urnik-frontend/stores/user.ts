@@ -32,7 +32,6 @@ export const useUserStore = defineStore('user', {
                     this.errors = {}
                 })
 
-
             } catch (error) {
                 console.log(error)
             }

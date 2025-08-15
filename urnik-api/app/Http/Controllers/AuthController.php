@@ -35,9 +35,11 @@ class AuthController extends Controller
                 'name' => 'required|string',
                 'email' => 'required|string|email|unique:users',
                 'password' => 'required|string',
-                'faculty_id' => 'sometimes|exists:faculties,id'
+                'confirm_password' => 'required|string|same:password',
+                'faculty_id' => 'required|exists:faculties,id'
             ]);
 
+            unset($data['confirm_password']);
             $data['password'] = bcrypt($data['password']);
 
             $user = User::create($data);

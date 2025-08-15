@@ -46,7 +46,7 @@ async function loginModalOpen(){
           </button>
         </div>
         <div v-if="showDropdown" class="absolute z-40 border-bottom-1 border w-100">
-          <button class="w-100" @click="userStore.delete()">{{ $t('logout') }}</button>
+          <button class="w-100" @click="userStore.delete()">{{ $t('delete_account') }}</button>
           <button class="w-100" @click="userStore.logout()">{{ $t('logout') }}</button>
         </div>
       </div>

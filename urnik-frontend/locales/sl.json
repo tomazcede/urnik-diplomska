@@ -39,5 +39,10 @@
   "background_color": "Barva ozadja",
   "reset": "Ponastavi",
   "export": "Izvozi",
-  "logout": "Odjava"
+  "logout": "Odjava",
+  "delete_account": "Zbriši račun",
+  "confirm-password": "Potrdi geslo",
+  "search": "Išči",
+  "search_events": "Išči dogodke",
+  "add": "Dodaj"
 }

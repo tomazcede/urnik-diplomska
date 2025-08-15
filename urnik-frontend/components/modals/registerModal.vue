@@ -13,19 +13,23 @@
 
       <div class="flex flex-col gap-2">
         <label>{{ $t('name') }}</label>
-        <input type="text" class="border" v-model="form.name" />
+        <input type="text" class="border" v-model="form.name" required />
         <div v-if="errors.name" class="text-red-500 text-sm">{{ errors.name }}</div>
 
         <label>{{ $t('email') }}</label>
-        <input type="email" class="border" v-model="form.email" />
+        <input type="email" class="border" v-model="form.email" required />
         <div v-if="errors.email" class="text-red-500 text-sm">{{ errors.email }}</div>
 
         <label>{{ $t('password') }}</label>
-        <input type="password" class="border" v-model="form.password" />
+        <input type="password" class="border" v-model="form.password" required />
         <div v-if="errors.password" class="text-red-500 text-sm">{{ errors.password }}</div>
 
+        <label>{{ $t('confirm-password') }}</label>
+        <input type="password" class="border" v-model="form.confirm_password" required />
+        <div v-if="errors.confirm_password" class="text-red-500 text-sm">{{ errors.confirm_password }}</div>
+
         <label>{{ $t('faculty') }}</label>
-        <select class="border" v-model="form.faculty_id">
+        <select class="border" v-model="form.faculty_id" required>
           <option value="">{{ $t('select_faculty') }}</option>
           <option v-for="fac in faculties" :key="fac.id" :value="fac.id">
             {{ fac.name }}
@@ -68,6 +72,7 @@ const form = ref({
   name: '',
   email: '',
   password: '',
+  confirm_password: '',
   faculty_id: ''
 })
 const loading = ref(false)
@@ -92,7 +97,7 @@ async function doRegister() {
       await scheduleStore.getSchedule(userStore.user.default_schedule.id, scheduleStore.from_date, scheduleStore.to_date)
       modalStore.closeModal()
     } else {
-      error.value = 'Login failed'
+      error.value = 'Registration failed'
     }
   } catch (err) {
     console.log(err)
