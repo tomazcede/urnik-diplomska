@@ -1,6 +1,6 @@
 <template>
-  <div class="w-full h-full flex justify-center items-center">
-    <div class="bg-white w-75 md:w-50 opacity-100 text-black p-2 md:p-4" style="height: fit-content">
+  <div class="w-full h-full flex justify-center items-center overflow-auto">
+    <div class="bg-white w-90 opacity-100 text-black p-2 md:p-4" style="height: fit-content">
       <div class="w-full flex mb-2">
         <div class="font-bold">{{ $t('edit_schedule') }}</div>
         <div class="ml-auto">

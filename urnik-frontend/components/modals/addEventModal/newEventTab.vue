@@ -45,6 +45,10 @@ const days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
           <option v-for="day in days" :key="day" :value="day">{{ $t(day) }}</option>
         </select>
       </div>
+      <div class="flex flex-col">
+        <label>{{ $t('is_public') }}</label>
+        <input type="checkbox" v-model="event.is_public" />
+      </div>
     </div>
   </div>
 </template>

@@ -95,7 +95,8 @@ const event = ref({
   start_date: today,
   end_date: '',
   day: 'mon',
-  color: null
+  color: null,
+  is_public: false
 })
 
 function addToList() {
@@ -115,7 +116,8 @@ function resetEvent() {
     location: '',
     start_date: today,
     end_date: '',
-    color: null
+    color: null,
+    is_public: true
   }
 }
 

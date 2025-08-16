@@ -51,7 +51,6 @@
 import { ref } from 'vue'
 import { useScheduleStore } from '~/stores/schedule'
 import { useModalStore } from '~/stores/modal'
-import {useEventStore} from "~/stores/event";
 
 const scheduleStore = useScheduleStore()
 const modalStore = useModalStore()

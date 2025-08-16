@@ -44,5 +44,6 @@
   "confirm-password": "Potrdi geslo",
   "search": "Išči",
   "search_events": "Išči dogodke",
-  "add": "Dodaj"
+  "add": "Dodaj",
+  "is_public": "Je javen?"
 }

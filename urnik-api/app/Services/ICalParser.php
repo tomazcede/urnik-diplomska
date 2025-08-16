@@ -62,11 +62,7 @@ class ICalParser
 
     protected static function parseDateTime($dateTimeString)
     {
-        if (!$dateTimeString) {
-            return null;
-        }
-
-        return Carbon::createFromFormat('Ymd\THis', $dateTimeString);
+        return $dateTimeString ? Carbon::createFromFormat('Ymd\THis', $dateTimeString) : null;
     }
 
     protected static function parseUntilDate($rrule)
@@ -75,7 +71,7 @@ class ICalParser
             return null;
         }
         if (preg_match('/UNTIL=(\d{8}T\d{6})/', $rrule, $matches)) {
-            return \DateTime::createFromFormat('Ymd\THis', $matches[1]);
+            return Carbon::createFromFormat('Ymd\THis', $matches[1]);
         }
         return null;
     }

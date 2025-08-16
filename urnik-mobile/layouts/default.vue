@@ -1,17 +1,17 @@
 <template>
   <div>
-<!--    <modal class="z-30">-->
-<!--      <add-event-modal v-if="modalStore.modalType == 'addEvent'" />-->
-<!--      <edit-event-modal v-if="modalStore.modalType == 'editEvent'" />-->
+    <modal class="z-30">
+      <add-event-modal v-if="modalStore.modalType == 'addEvent'" />
+      <edit-event-modal v-if="modalStore.modalType == 'editEvent'" />
 <!--      <login-modal v-if="modalStore.modalType == 'login'" />-->
 <!--      <register-modal v-if="modalStore.modalType == 'register'" />-->
-<!--      <edit-schedule-modal v-if="modalStore.modalType == 'editSchedule'" />-->
-<!--    </modal>-->
+      <edit-schedule-modal v-if="modalStore.modalType == 'editSchedule'" />
+    </modal>
 
-<!--    <div-->
-<!--        class="fixed top-0 left-0 w-full h-screen bg-black opacity-50 z-20"-->
-<!--        v-if="modalStore.isVisible"-->
-<!--    ></div>-->
+    <div
+        class="fixed top-0 left-0 w-full h-screen bg-black opacity-50 z-20"
+        v-if="modalStore.isVisible"
+    ></div>
 
     <app-header />
 

@@ -44,5 +44,6 @@
   "confirm-password": "Confirm password",
   "search": "Search",
   "search_events": "Search events",
-  "add": "Add"
+  "add": "Add",
+  "is_public": "Is public?"
 }
