@@ -52,7 +52,11 @@ class EventController extends Controller
                 $schedule->updateJsonEvent($request->event);
             } else {
                 $schedule = Schedule::find($request->schedule_id);
+
                 $event = Event::find($request->event['id']);
+                if(auth()->user() == null || auth()->user()->id != $event->user_id) {
+                    return response()->json(['error' => 'Unauthorized.'], 403);
+                }
                 $event->update($request->event);
             }
 

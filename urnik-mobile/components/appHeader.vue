@@ -39,7 +39,7 @@
         </button>
 
         <NuxtLink v-if="!user" to="/login" class="btn-primary" @click="sidebarOpen = false">
-          {{ $t('login') }}
+          {{ $t('logins') }}
         </NuxtLink>
 
         <div v-else class="relative flex flex-col gap-2">
