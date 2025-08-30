@@ -5,6 +5,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use DateTime;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Str;
@@ -16,6 +17,7 @@ use Spatie\IcalendarGenerator\ValueObjects\RRule;
 
 class Schedule extends Model
 {
+    use HasFactory;
     protected $fillable = [
         'name',
         'user_id',

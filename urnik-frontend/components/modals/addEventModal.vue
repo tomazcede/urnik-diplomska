@@ -61,8 +61,23 @@ import SelectEventsTab from "~/components/modals/addEventModal/selectEventsTab.v
 const events = ref<any[]>([])
 const scheduleStore = useScheduleStore()
 const modalStore = useModalStore()
+const userStore = useUserStore()
 const tab = ref('new')
-const tabs = [
+const tabs = computed(() => {return userStore.user ?
+    [
+      {
+        name: 'new_event',
+        tab: 'new'
+      },
+      {
+        name: 'import_events',
+        tab: 'import'
+      },
+      {
+        name: 'search_events',
+        tab: 'search'
+      }
+    ] : [
   {
     name: 'new_event',
     tab: 'new'
@@ -70,12 +85,8 @@ const tabs = [
   {
     name: 'import_events',
     tab: 'import'
-  },
-  {
-    name: 'search_events',
-    tab: 'search'
   }
-]
+]})
 
 const checkValues = computed(() => {
   return event.value.name != ''
