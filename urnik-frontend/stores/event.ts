@@ -53,7 +53,7 @@ export const useEventStore = defineStore('event', {
 
         openEditModal(event: object) {
             const modalstore = useModalStore()
-
+            event.to_hour = event.to_hour + 1
             this.event = event
             modalstore.modalType = "editEvent"
             modalstore.isVisible = true

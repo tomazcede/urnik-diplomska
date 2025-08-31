@@ -111,6 +111,7 @@ const event = ref({
 })
 
 function addToList() {
+  event.value.to_hour = event.value.to_hour - 1
   events.value.push({ ...event.value })
   resetEvent()
 }

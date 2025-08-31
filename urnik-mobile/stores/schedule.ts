@@ -72,6 +72,7 @@ export const useScheduleStore = defineStore('schedule', {
             let localData = localStorage.getItem('schedule')
             const { $axios } = useNuxtApp()
 
+            event.to_hour = event.to_hour - 1
             try {
                 const postdata = {
                     event: event,
