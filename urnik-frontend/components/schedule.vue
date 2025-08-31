@@ -68,7 +68,7 @@
             }"
         >
           <div
-              class="row flex-1 flex flex-col justify-stretch gap-1"
+              class="row gap-1"
               v-if="schedule[day][hour] && schedule[day][hour].length"
               style="height: 100%"
           >
