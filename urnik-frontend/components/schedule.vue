@@ -59,9 +59,13 @@
         <td
             v-for="day in days"
             :key="day"
-            class="border border-gray-300 align-top h-16 relative"
+            class="border border-gray-300 align-top relative"
             style="overflow: clip; height: inherit"
-            :style="colors.background_color ? 'background-color: ' + colors.background_color + ';' : ''"
+            :style="{
+              overflow: 'clip',
+              height: (schedule[day][hour] && schedule[day][hour].length) ? 'inherit' : 'calc(var(--spacing) * 16)',
+              backgroundColor: colors.background_color || ''
+            }"
         >
           <div
               class="row flex-1 flex flex-col justify-stretch gap-1"
