@@ -59,14 +59,15 @@
             v-for="day in days"
             :key="day"
             class="border border-gray-300 p-2 align-top h-16 relative"
+            style="overflow: clip"
             :style="colors.background_color ? 'background-color: ' + colors.background_color + ';' : ''"
         >
           <div
-              class="space-y-1"
+              class="row "
               v-if="schedule[day][hour] && schedule[day][hour].length"
           >
             <div
-                class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded shadow-sm"
+                class="bg-blue-100 text-blue-800 text-xs px-1 py-1 rounded shadow-sm col"
                 :style="event.color ? 'background-color: ' + event.color + '; color: black;' : ''"
                 v-for="event in schedule[day][hour]"
                 :key="event.id"
