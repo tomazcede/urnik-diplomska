@@ -48,6 +48,7 @@
           v-for="hour in hours"
           :key="hour"
           class="hover:bg-gray-50 transition-colors"
+          style="height: 1px"
           :id="'hour-' + hour"
       >
         <td v-if="!isMobile"
@@ -59,15 +60,16 @@
             v-for="day in days"
             :key="day"
             class="border border-gray-300 p-2 align-top h-16 relative"
-            style="overflow: clip"
+            style="overflow: clip; height: inherit"
             :style="colors.background_color ? 'background-color: ' + colors.background_color + ';' : ''"
         >
           <div
-              class="row "
+              class="row flex-1 flex flex-col justify-stretch gap-1"
               v-if="schedule[day][hour] && schedule[day][hour].length"
+              style="height: 100%"
           >
             <div
-                class="bg-blue-100 text-blue-800 text-xs px-1 py-1 rounded shadow-sm col"
+                class="bg-blue-100 text-blue-800 text-xs px-1 py-1 rounded shadow-sm col flex-1"
                 :style="event.color ? 'background-color: ' + event.color + '; color: black;' : ''"
                 v-for="event in schedule[day][hour]"
                 :key="event.id"
