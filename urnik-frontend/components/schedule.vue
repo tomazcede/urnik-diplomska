@@ -52,14 +52,14 @@
           :id="'hour-' + hour"
       >
         <td v-if="!isMobile"
-            class="border border-gray-300 p-2 text-center font-medium text-sm"
+            class="border border-gray-300 text-center font-medium text-sm"
             :style="colors.secondary_color ? 'background-color: ' + colors.secondary_color + ';' : 'background-color: var(--color-gray-50);'">
           {{ formatHour(hour) }}
         </td>
         <td
             v-for="day in days"
             :key="day"
-            class="border border-gray-300 p-2 align-top h-16 relative"
+            class="border border-gray-300 align-top h-16 relative"
             style="overflow: clip; height: inherit"
             :style="colors.background_color ? 'background-color: ' + colors.background_color + ';' : ''"
         >
@@ -69,7 +69,7 @@
               style="height: 100%"
           >
             <div
-                class="bg-blue-100 text-blue-800 text-xs px-1 py-1 rounded shadow-sm col flex-1"
+                class="bg-blue-100 text-blue-800 text-xs px-1 py-1 rounded shadow-sm col flex-1 px-4"
                 :style="event.color ? 'background-color: ' + event.color + '; color: black;' : ''"
                 v-for="event in schedule[day][hour]"
                 :key="event.id"
