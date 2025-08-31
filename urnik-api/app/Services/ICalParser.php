@@ -50,7 +50,7 @@ class ICalParser
         return [
             'name'       => $event['SUMMARY'] ?? null,
             'from_hour'  => $from ? $from->hour : null,
-            'to_hour'    => $to ? $to->hour : null,
+            'to_hour'    => $to ? $to->hour - 1 : null,
             'location'   => $event['LOCATION'] ?? null,
             'is_public'  => $faculty_id ? true : false,
             'faculty_id' => $faculty_id,
