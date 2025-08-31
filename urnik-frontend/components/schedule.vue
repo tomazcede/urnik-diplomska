@@ -26,7 +26,7 @@
     >
       <img :src="'/img/edit.png'" alt="Edit" width="20" height="20" />
     </button>
-    <table class="w-full table-fixed border-collapse border border-gray-300 text-xs">
+    <table class="w-full table-fixed border-collapse border border-gray-300 text-xs" style="height: 1px">
       <thead>
       <tr :style="colors.primary_color ? 'background-color: ' + colors.primary_color + ';' : 'background-color: var(--color-gray-100);'">
         <th v-if="!isMobile" class="border border-gray-300 p-2 w-20"></th>
@@ -48,7 +48,7 @@
           v-for="hour in hours"
           :key="hour"
           class="hover:bg-gray-50 transition-colors"
-          style="height: 1px"
+          style="height: 100%"
           :id="'hour-' + hour"
       >
         <td v-if="!isMobile"
