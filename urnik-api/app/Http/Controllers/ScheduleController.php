@@ -13,7 +13,12 @@ class ScheduleController extends Controller
 {
     public function show(Request $request) {
         try {
-            $schedule = $request->id && $request->id != null ? Schedule::find($request->id) : Schedule::convertFromJson($request->json);
+//            $request->validate([
+//                'id' => 'required_without:json|nullable|integer',
+//                'json' => 'required_without:id|nullable',
+//            ]);
+
+            $schedule = $request->id && $request->id != null ? Schedule::findOrFail($request->id) : Schedule::convertFromJson($request->json);
 
             return $request->from && $request->to ?
                 response()->json($schedule->convertToJson($request->from, $request->to))
@@ -48,6 +53,11 @@ class ScheduleController extends Controller
 
     public function update(Request $request) {
         try {
+//            $request->validate([
+//                'id' => 'required_without:json|nullable|integer|exists:schedules,id',
+//                'json' => 'required_without:id|nullable|string',
+//            ]);
+
             if($request->json) {
                 $schedule = Schedule::convertFromJson($request->json);
 
@@ -55,7 +65,9 @@ class ScheduleController extends Controller
                 $schedule->primary_color = $request->primary_color;
                 $schedule->secondary_color = $request->secondary_color;
                 $schedule->background_color = $request->background_color;
-            } else {
+
+                return response()->json($schedule->convertToJson());
+            } else if($request->id) {
                 $schedule = Schedule::find($request->id);
 //
 //                if(auth()->user()->id !== $schedule->user_id)
@@ -63,15 +75,17 @@ class ScheduleController extends Controller
 
                 $validate = $request->validate([
                     'name' => 'required|string',
-                    'primary_color' => 'sometimes|string|nullable',
-                    'secondary_color' => 'sometimes|string|nullable',
-                    'background_color' => 'sometimes|string|nullable',
+                    'primary_color' => 'sometimes|string|nullable|color',
+                    'secondary_color' => 'sometimes|string|nullable|color',
+                    'background_color' => 'sometimes|string|nullable|color',
                 ]);
 
                 $schedule->update($validate);
+
+                return response()->json($schedule->convertToJson());
             }
 
-            return response()->json($schedule->convertToJson());
+            return response('Not found', 404);
         } catch(\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }

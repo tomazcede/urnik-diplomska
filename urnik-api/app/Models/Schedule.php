@@ -171,6 +171,7 @@ class Schedule extends Model
         $ids = collect($this->events)->pluck('eid');
         foreach ($events as $event) {
             $data = collect($event)->toArray();
+
             $e = new \App\Models\Event($data);
             do{
                 $e->eid = rand(10000, 99999);

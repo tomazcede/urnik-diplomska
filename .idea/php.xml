@@ -137,6 +137,14 @@
       <path value="$PROJECT_DIR$/urnik-api/vendor/laravel/prompts" />
       <path value="$PROJECT_DIR$/urnik-api/vendor/symfony/mime" />
       <path value="$PROJECT_DIR$/urnik-api/vendor/sebastian/recursion-context" />
+      <path value="$PROJECT_DIR$/urnik-api/vendor/phpoffice/phpspreadsheet" />
+      <path value="$PROJECT_DIR$/urnik-api/vendor/maennchen/zipstream-php" />
+      <path value="$PROJECT_DIR$/urnik-api/vendor/maatwebsite/excel" />
+      <path value="$PROJECT_DIR$/urnik-api/vendor/markbaker/complex" />
+      <path value="$PROJECT_DIR$/urnik-api/vendor/markbaker/matrix" />
+      <path value="$PROJECT_DIR$/urnik-api/vendor/spatie/icalendar-generator" />
+      <path value="$PROJECT_DIR$/urnik-api/vendor/ezyang/htmlpurifier" />
+      <path value="$PROJECT_DIR$/urnik-api/vendor/laravel/sanctum" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.2">

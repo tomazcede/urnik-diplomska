@@ -114,4 +114,91 @@ class ScheduleControllerTest extends TestCase
         $response->assertStatus(200)
             ->assertJsonMissing(['name' => 'test1']);
     }
+
+    /** @test */
+    public function test_show_schedule_with_nonexistent_id()
+    {
+        $response = $this->json('POST', '/api/schedule/show', ['id' => 999999]);
+
+        $response->assertStatus(404)
+            ->assertJson(['error' => 'Schedule not found']);
+    }
+
+    /** @test */
+    public function test_update_schedule_with_invalid_color()
+    {
+        $user = User::factory()->create();
+        $schedule = Schedule::factory()->create(["user_id" => $user->id]);
+
+        $payload = [
+            'id' => $schedule->id,
+            'name' => 'Schedule with Bad Color',
+            'primary_color' => 'not-a-color',
+        ];
+
+        $response = $this->json('POST', '/api/schedule/update', $payload);
+
+        $response->assertStatus(422) // validation error
+        ->assertJsonValidationErrors(['primary_color']);
+    }
+
+    /** @test */
+    public function test_add_events_with_missing_fields()
+    {
+        $user = User::factory()->create();
+        $schedule = Schedule::factory()->create(["user_id" => $user->id]);
+
+        $events = [
+            [
+                'from_hour' => '09',
+                'to_hour' => '11',
+            ]
+        ];
+
+        $response = $this->json('POST', '/api/schedule/add-events', [
+            'id' => $schedule->id,
+            'events' => $events,
+        ]);
+
+        $response->assertStatus(422)
+        ->assertJsonValidationErrors(['events.0.name', 'events.0.day']);
+    }
+
+    /** @test */
+    public function test_remove_event_that_does_not_belong_to_schedule()
+    {
+        $user = User::factory()->create();
+        $schedule1 = Schedule::factory()->create(["user_id" => $user->id]);
+        $schedule2 = Schedule::factory()->create(["user_id" => $user->id]);
+
+        $event = $schedule2->events()->create([
+            'name' => 'foreign-event',
+            'from_hour' => '08',
+            'to_hour' => '10',
+            'location' => '',
+            'is_public' => true,
+            'faculty_id' => null,
+            'start_date' => '2025-01-01',
+            'end_date' => '2025-07-10',
+            'day' => 'tue',
+            'color' => '#00FF00',
+        ]);
+
+        $response = $this->json('POST', '/api/schedule/remove-event', [
+            'id' => $schedule1->id,
+            'event_id' => $event->id,
+        ]);
+
+        $response->assertStatus(403)
+            ->assertJson(['error' => 'Event does not belong to this schedule']);
+    }
+
+    /** @test */
+    public function test_update_schedule_with_empty_payload()
+    {
+        $response = $this->json('POST', '/api/schedule/update', []);
+
+        $response->assertStatus(404)
+        ->assertJsonValidationErrors(['id', 'name']);
+    }
 }
