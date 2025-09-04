@@ -58,6 +58,13 @@ class ScheduleController extends Controller
                 'json' => 'required_without:id|nullable',
             ]);
 
+            $validate = $request->validate([
+                'name' => 'required|string',
+                'primary_color' => 'sometimes|string|nullable|color',
+                'secondary_color' => 'sometimes|string|nullable|color',
+                'background_color' => 'sometimes|string|nullable|color',
+            ]);
+
             if($request->json) {
                 $schedule = Schedule::convertFromJson($request->json);
 
@@ -72,13 +79,6 @@ class ScheduleController extends Controller
 //
 //                if(auth()->user()->id !== $schedule->user_id)
 //                    return response("Action prohibited", 403);
-
-                $validate = $request->validate([
-                    'name' => 'required|string',
-                    'primary_color' => 'sometimes|string|nullable|color',
-                    'secondary_color' => 'sometimes|string|nullable|color',
-                    'background_color' => 'sometimes|string|nullable|color',
-                ]);
 
                 $schedule->update($validate);
 
@@ -97,7 +97,7 @@ class ScheduleController extends Controller
                 'id' => 'required_without:json|nullable|integer',
                 'json' => 'required_without:id|nullable',
             ]);
-            
+
             if($request->json) {
                 $schedule = Schedule::convertFromJson($request->json);
                 $schedule->addEventsToJson($request->events);
