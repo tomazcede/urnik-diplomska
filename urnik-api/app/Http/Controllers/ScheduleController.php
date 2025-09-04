@@ -13,10 +13,10 @@ class ScheduleController extends Controller
 {
     public function show(Request $request) {
         try {
-//            $request->validate([
-//                'id' => 'required_without:json|nullable|integer',
-//                'json' => 'required_without:id|nullable',
-//            ]);
+            $request->validate([
+                'id' => 'required_without:json|nullable|integer',
+                'json' => 'required_without:id|nullable',
+            ]);
 
             $schedule = $request->id && $request->id != null ? Schedule::findOrFail($request->id) : Schedule::convertFromJson($request->json);
 
@@ -53,10 +53,10 @@ class ScheduleController extends Controller
 
     public function update(Request $request) {
         try {
-//            $request->validate([
-//                'id' => 'required_without:json|nullable|integer|exists:schedules,id',
-//                'json' => 'required_without:id|nullable|string',
-//            ]);
+            $request->validate([
+                'id' => 'required_without:json|nullable|integer',
+                'json' => 'required_without:id|nullable',
+            ]);
 
             if($request->json) {
                 $schedule = Schedule::convertFromJson($request->json);
@@ -93,6 +93,11 @@ class ScheduleController extends Controller
 
     public function addEvents(Request $request) {
         try {
+            $request->validate([
+                'id' => 'required_without:json|nullable|integer',
+                'json' => 'required_without:id|nullable',
+            ]);
+            
             if($request->json) {
                 $schedule = Schedule::convertFromJson($request->json);
                 $schedule->addEventsToJson($request->events);
@@ -113,6 +118,11 @@ class ScheduleController extends Controller
 
     public function removeEvent(Request $request) {
         try {
+            $request->validate([
+                'id' => 'required_without:json|nullable|integer',
+                'json' => 'required_without:id|nullable',
+            ]);
+
             if($request->json) {
                 $schedule = Schedule::convertFromJson($request->json);
                 $schedule->removeEventFromJson($request->event_id);
@@ -132,6 +142,11 @@ class ScheduleController extends Controller
 
     public function export(Request $request) {
         try {
+            $request->validate([
+                'id' => 'required_without:json|nullable|integer',
+                'json' => 'required_without:id|nullable',
+            ]);
+
             if($request->json) {
                 $schedule = Schedule::convertFromJson($request->json);
             } else {
