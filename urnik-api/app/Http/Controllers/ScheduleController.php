@@ -13,17 +13,16 @@ class ScheduleController extends Controller
 {
     public function show(Request $request) {
         try {
-            $request->validate([
-                'id' => 'required_without:json|nullable|integer',
-                'json' => 'required_without:id|nullable',
-            ]);
-
             $schedule = $request->id && $request->id != null ? Schedule::findOrFail($request->id) : Schedule::convertFromJson($request->json);
 
             return $request->from && $request->to ?
                 response()->json($schedule->convertToJson($request->from, $request->to))
                 :
                 response()->json($schedule->convertToJson());
+        } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(['error' => 'Schedule not found'], 404);
+        } catch(\Illuminate\Validation\ValidationException $e) {
+            return response()->json(['error' => $e->errors()], 422);
         } catch(\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
@@ -46,8 +45,12 @@ class ScheduleController extends Controller
             }
 
             return response()->json($schedule->convertToJson());
+        } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(['error' => 'Schedule not found'], 404);
+        } catch(\Illuminate\Validation\ValidationException $e) {
+            return response()->json(['error' => $e->errors()], 422);
         } catch(\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], $e->getCode());
+            return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 
@@ -86,6 +89,10 @@ class ScheduleController extends Controller
             }
 
             return response('Not found', 404);
+        } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(['error' => 'Schedule not found'], 404);
+        } catch(\Illuminate\Validation\ValidationException $e) {
+            return response()->json(['error' => $e->errors()], 422);
         } catch(\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
@@ -111,6 +118,10 @@ class ScheduleController extends Controller
             }
 
             return response()->json($schedule->convertToJson());
+        } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(['error' => 'Schedule not found'], 404);
+        } catch(\Illuminate\Validation\ValidationException $e) {
+            return response()->json(['error' => $e->errors()], 422);
         } catch(\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
@@ -135,6 +146,10 @@ class ScheduleController extends Controller
             }
 
             return response()->json($schedule->convertToJson());
+        } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(['error' => 'Schedule not found'], 404);
+        } catch(\Illuminate\Validation\ValidationException $e) {
+            return response()->json(['error' => $e->errors()], 422);
         } catch(\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
@@ -163,8 +178,12 @@ class ScheduleController extends Controller
             return response()->download($path, $filename, [
                 'Content-Type' => 'text/calendar',
             ])->deleteFileAfterSend();
+        } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(['error' => 'Schedule not found'], 404);
+        } catch(\Illuminate\Validation\ValidationException $e) {
+            return response()->json(['error' => $e->errors()], 422);
         } catch(\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], $e->getCode());
+            return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 }
